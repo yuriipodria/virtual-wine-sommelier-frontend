@@ -1,0 +1,9 @@
+@use './variables' as *;
+
+@use 'bulma/sass' with (
+  $primary: $pink,
+);
+
+iframe {
+  display: none;
+}

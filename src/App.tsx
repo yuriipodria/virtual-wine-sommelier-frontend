@@ -1,7 +1,10 @@
-import './App.css';
+import { Header } from './Header';
+import './App.scss';
 
-function App() {
-  return <></>;
-}
-
-export default App;
+export const App = () => {
+  return (
+    <>
+      <Header />
+    </>
+  );
+};
