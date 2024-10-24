@@ -1,0 +1,14 @@
+@import '../../variables.scss';
+
+.no_hover {
+  &:hover {
+    background-color: initial;
+    cursor: default;
+  }
+}
+
+.navbar {
+  height: $header-height;
+  box-shadow: 0 8px 12px #bdbdbd;
+  margin-bottom: $header-margin;
+}

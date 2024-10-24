@@ -1,0 +1,13 @@
+@import '../../variables.scss';
+
+.container {
+  height: calc(100vh - $header-height - $header-margin);
+  display: flex;
+  align-items: center;
+}
+
+.form {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
