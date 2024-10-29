@@ -13,14 +13,10 @@ export const Header = () => {
     <>
       <Navbar className={styles.navbar} mb={5} color="primary">
         <Navbar.Brand>
-          <Navbar.Item>
-            <Link to="/">
-              <div style={{ height: '100%' }}>
-                <Heading size={3} className="has-text-white">
-                  wine
-                </Heading>
-              </div>
-            </Link>
+          <Navbar.Item renderAs={Link} to="/">
+            <Heading size={3} className="has-text-white">
+              wine
+            </Heading>
           </Navbar.Item>
         </Navbar.Brand>
 
@@ -28,16 +24,12 @@ export const Header = () => {
 
         <Navbar.Menu>
           <Navbar.Container>
-            <Navbar.Item>
-              <Link to="/" style={{ all: 'unset' }}>
-                Home
-              </Link>
+            <Navbar.Item renderAs={Link} to="/">
+              Home
             </Navbar.Item>
 
-            <Navbar.Item>
-              <Link to="/catalog" style={{ all: 'unset' }}>
-                Catalog
-              </Link>
+            <Navbar.Item renderAs={Link} to="/catalog">
+              Catalog
             </Navbar.Item>
 
             <Navbar.Item>Cart</Navbar.Item>

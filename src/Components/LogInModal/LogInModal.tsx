@@ -13,8 +13,8 @@ export const LogInModal: React.FC<Props> = ({ isShown, setIsShown }) => (
         <Modal.Card.Title>Log In</Modal.Card.Title>
       </Modal.Card.Header>
 
-      <Modal.Card.Body>
-        <form>
+      <form>
+        <Modal.Card.Body>
           <Form.Field>
             <Form.Label htmlFor="email-input">Email</Form.Label>
 
@@ -30,15 +30,22 @@ export const LogInModal: React.FC<Props> = ({ isShown, setIsShown }) => (
               <Form.Input id="password-input" />
             </Form.Control>
           </Form.Field>
-        </form>
-      </Modal.Card.Body>
+        </Modal.Card.Body>
 
-      <Modal.Card.Footer renderAs={Button.Group} align="center">
-        <Button color="success" style={{ color: 'white' }}>
-          Log In
-        </Button>
-        <Button onClick={() => setIsShown(false)}>Cancel</Button>
-      </Modal.Card.Footer>
+        <Modal.Card.Footer renderAs={Button.Group} align="center">
+          <Form.Field kind="group">
+            <Form.Control>
+              <Button color="success" textColor="white">
+                Log In
+              </Button>
+            </Form.Control>
+
+            <Form.Control>
+              <Button onClick={() => setIsShown(false)}>Cancel</Button>
+            </Form.Control>
+          </Form.Field>
+        </Modal.Card.Footer>
+      </form>
     </Modal.Card>
   </Modal>
 );

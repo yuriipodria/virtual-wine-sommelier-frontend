@@ -1,8 +1,8 @@
-import { Block, Form, Heading } from 'react-bulma-components';
+import { Block, Button, Form, Heading } from 'react-bulma-components';
 import { Checkbox } from '../Checkbox';
 
 export const Sidebar = () => (
-  <Block ml={2}>
+  <Block p={4}>
     <aside>
       <form style={{ width: 'max-content' }}>
         <Form.Field mb={5}>
@@ -98,6 +98,12 @@ export const Sidebar = () => (
             <Form.Input />
             <p>To</p>
             <Form.Input />
+          </Form.Control>
+        </Form.Field>
+
+        <Form.Field>
+          <Form.Control textAlign="center">
+            <Button color="primary">Apply</Button>
           </Form.Control>
         </Form.Field>
       </form>

@@ -1,4 +1,4 @@
-import { Container, Box, Form, Columns } from 'react-bulma-components';
+import { Container, Box, Form, Columns, Button } from 'react-bulma-components';
 
 export const Homepage = () => {
   return (
@@ -144,6 +144,20 @@ export const Homepage = () => {
                   <Form.Input />
                 </Form.Control>
               </Box>
+            </Form.Field>
+          </Columns.Column>
+
+          <Columns.Column alignContent="center">
+            <Form.Field>
+              <Form.Control>
+                <Button
+                  color="primary"
+                  textSize={4}
+                  style={{ width: '100%', height: '100%' }}
+                >
+                  Search!
+                </Button>
+              </Form.Control>
             </Form.Field>
           </Columns.Column>
         </Columns>
