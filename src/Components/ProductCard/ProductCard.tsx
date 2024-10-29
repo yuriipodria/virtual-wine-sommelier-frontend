@@ -1,25 +1,30 @@
-import { Button, Card, Content, Media } from 'react-bulma-components';
+import { Card, Columns, Content } from 'react-bulma-components';
 
 export const ProductCard = () => {
   return (
-    <Card>
-      <Card.Content>
-        <Media>
-          <Media.Item>
-            <p className="title is-4">Product Name</p>
-            <p className="subtitle is-6">$20.00</p>
-          </Media.Item>
-        </Media>
-        <Content>
-          This is a short description of the product. It highlights key features
-          and benefits.
-        </Content>
-      </Card.Content>
-      <Card.Footer>
-        <Card.Footer.Item>
-          <Button color="primary">Add to Cart</Button>
-        </Card.Footer.Item>
-      </Card.Footer>
-    </Card>
+    <Columns.Column size={2}>
+      <Card style={{ width: 300 }}>
+        <Card.Image
+          size="4by3"
+          src="http://bulma.io/images/placeholders/1280x960.png"
+        />
+
+        <Card.Header>
+          <Card.Header.Title>Lorem, ipsum.</Card.Header.Title>
+        </Card.Header>
+
+        <Card.Content>
+          <Content>
+            <p>Country: Ukraine</p>
+            <p>Type: Dry</p>
+            <p>Color: Red</p>
+          </Content>
+        </Card.Content>
+
+        <Card.Footer>
+          <Card.Footer.Item>Price: 49.99$</Card.Footer.Item>
+        </Card.Footer>
+      </Card>
+    </Columns.Column>
   );
 };

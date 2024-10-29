@@ -1,5 +1,11 @@
-import { ProductCard } from '../ProductCard';
+import { ProductList } from '../ProductList';
+import { Sidebar } from '../Sidebar';
 
 export const Catalog = () => {
-  return <ProductCard />;
+  return (
+    <div style={{ display: 'flex', alignItems: 'flex-start' }}>
+      <Sidebar />
+      <ProductList />
+    </div>
+  );
 };
