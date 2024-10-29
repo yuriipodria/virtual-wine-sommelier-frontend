@@ -3,9 +3,11 @@ import styles from './Header.module.scss';
 import { Link } from 'react-router-dom';
 import { SignUpModal } from '../SignUpModal';
 import { useState } from 'react';
+import { LogInModal } from '../LogInModal';
 
 export const Header = () => {
   const [isSignUpModalShown, setIsSignUpModalShown] = useState(false);
+  const [isLogInModalShown, setIsLogInModalShown] = useState(false);
 
   return (
     <>
@@ -46,7 +48,9 @@ export const Header = () => {
               Sign Up
             </Navbar.Item>
 
-            <Navbar.Item>Log In</Navbar.Item>
+            <Navbar.Item onClick={() => setIsLogInModalShown(true)}>
+              Log In
+            </Navbar.Item>
           </Navbar.Container>
         </Navbar.Menu>
       </Navbar>
@@ -54,6 +58,11 @@ export const Header = () => {
       <SignUpModal
         isShown={isSignUpModalShown}
         setIsShown={setIsSignUpModalShown}
+      />
+
+      <LogInModal
+        isShown={isLogInModalShown}
+        setIsShown={setIsLogInModalShown}
       />
     </>
   );

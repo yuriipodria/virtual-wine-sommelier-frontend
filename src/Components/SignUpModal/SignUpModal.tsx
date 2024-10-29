@@ -15,7 +15,7 @@ export const SignUpModal: React.FC<Props> = ({ isShown, setIsShown }) => (
       <Modal.Card.Body>
         <form>
           <Form.Field>
-            <Form.Label>Login</Form.Label>
+            <Form.Label>Username</Form.Label>
 
             <Form.Control>
               <Form.Input />
@@ -52,7 +52,7 @@ export const SignUpModal: React.FC<Props> = ({ isShown, setIsShown }) => (
         <Button color="success" style={{ color: 'white' }}>
           Sign Up
         </Button>
-        <Button>Cancel</Button>
+        <Button onClick={() => setIsShown(false)}>Cancel</Button>
       </Modal.Card.Footer>
     </Modal.Card>
   </Modal>
