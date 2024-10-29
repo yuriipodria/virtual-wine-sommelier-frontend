@@ -15,34 +15,36 @@ export const SignUpModal: React.FC<Props> = ({ isShown, setIsShown }) => (
       <Modal.Card.Body>
         <form>
           <Form.Field>
-            <Form.Label>Username</Form.Label>
+            <Form.Label htmlFor="username-input">Username</Form.Label>
 
             <Form.Control>
-              <Form.Input />
+              <Form.Input id="username-input" />
             </Form.Control>
           </Form.Field>
 
           <Form.Field>
-            <Form.Label>Email</Form.Label>
+            <Form.Label htmlFor="email-input">Email</Form.Label>
 
             <Form.Control>
-              <Form.Input />
+              <Form.Input id="email-input" />
             </Form.Control>
           </Form.Field>
 
           <Form.Field>
-            <Form.Label>Password</Form.Label>
+            <Form.Label htmlFor="password-input">Password</Form.Label>
 
             <Form.Control>
-              <Form.Input />
+              <Form.Input id="password-input" />
             </Form.Control>
           </Form.Field>
 
           <Form.Field>
-            <Form.Label>Confirm password</Form.Label>
+            <Form.Label htmlFor="password-confirm-input">
+              Confirm password
+            </Form.Label>
 
             <Form.Control>
-              <Form.Input />
+              <Form.Input id="password-confirm-input" />
             </Form.Control>
           </Form.Field>
         </form>
