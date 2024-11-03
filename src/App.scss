@@ -4,6 +4,10 @@
   $primary: $pink,
 );
 
+body, html {
+  font-family: 'Roboto', serif;
+}
+
 iframe {
   display: none;
 }

@@ -19,7 +19,7 @@ export const LogInModal: React.FC<Props> = ({ isShown, setIsShown }) => (
             <Form.Label htmlFor="email-input">Email</Form.Label>
 
             <Form.Control>
-              <Form.Input id="email-input" />
+              <Form.Input id="email-input" placeholder="example@gmail.com" />
             </Form.Control>
           </Form.Field>
 
@@ -27,7 +27,7 @@ export const LogInModal: React.FC<Props> = ({ isShown, setIsShown }) => (
             <Form.Label htmlFor="password-input">Password</Form.Label>
 
             <Form.Control>
-              <Form.Input id="password-input" />
+              <Form.Input id="password-input" placeholder="Password" />
             </Form.Control>
           </Form.Field>
         </Modal.Card.Body>

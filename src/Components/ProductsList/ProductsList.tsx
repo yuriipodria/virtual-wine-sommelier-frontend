@@ -1,9 +1,9 @@
 import { Columns } from 'react-bulma-components';
 import { ProductCard } from '../ProductCard';
 
-export const ProductList = () => {
+export const ProductsList = () => {
   return (
-    <Columns mx={5}>
+    <Columns p={6}>
       <ProductCard />
       <ProductCard />
       <ProductCard />

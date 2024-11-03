@@ -1,0 +1,19 @@
+.block {
+  background-color: #ffedf4;
+  margin-bottom: 0;
+}
+
+.form {
+  width: max-content;
+  display: flex;
+  flex-direction: column;
+  align-content: end;
+}
+
+.heading {
+  margin-bottom: 6px;
+}
+
+.price_form_field {
+  width: 120px;
+}

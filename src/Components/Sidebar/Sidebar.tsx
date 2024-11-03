@@ -1,94 +1,95 @@
 import { Block, Button, Form, Heading } from 'react-bulma-components';
 import { Checkbox } from '../Checkbox';
+import styles from './Sidebar.module.scss';
 
 export const Sidebar = () => (
-  <Block p={4}>
+  <Block className={styles.block} px={6} py={4}>
     <aside>
-      <form style={{ width: 'max-content' }}>
+      <form className={styles.form}>
         <Form.Field mb={5}>
           <Form.Label>
-            <Heading size={5} style={{ marginBottom: '6px' }}>
+            <Heading size={5} className={styles.heading}>
               Mood
             </Heading>
           </Form.Label>
 
           <Form.Control>
-            <Checkbox labelText="Celebratory" />
-            <Checkbox labelText="Adventurous" />
-            <Checkbox labelText="Indulgent" />
-            <Checkbox labelText="Nostalgic" />
-            <Checkbox labelText="Romantic" />
+            <Checkbox labelText="Celebratory" id="celebratory-checkbox" />
+            <Checkbox labelText="Adventurous" id="adventurous-checkbox" />
+            <Checkbox labelText="Indulgent" id="indulgent-checkbox" />
+            <Checkbox labelText="Nostalgic" id="nostalgic-checkbox" />
+            <Checkbox labelText="Romantic" id="romantic-checkbox" />
           </Form.Control>
         </Form.Field>
 
         <Form.Field mb={5}>
           <Form.Label>
-            <Heading size={5} style={{ marginBottom: '6px' }}>
+            <Heading size={5} className={styles.heading}>
               Purpose
             </Heading>
           </Form.Label>
 
           <Form.Control>
-            <Checkbox labelText="Gift" />
-            <Checkbox labelText="Complement" />
-            <Checkbox labelText="Cooking" />
-            <Checkbox labelText="Socialization" />
-            <Checkbox labelText="Curiosity" />
+            <Checkbox labelText="Gift" id="gift-checkbox" />
+            <Checkbox labelText="Complement" id="complement-checkbox" />
+            <Checkbox labelText="Cooking" id="cooking-checkbox" />
+            <Checkbox labelText="Socialization" id="socialization-checkbox" />
+            <Checkbox labelText="Curiosity" id="curiousity-checkbox" />
           </Form.Control>
         </Form.Field>
 
         <Form.Field mb={5}>
           <Form.Label>
-            <Heading size={5} style={{ marginBottom: '6px' }}>
+            <Heading size={5} className={styles.heading}>
               Color
             </Heading>
           </Form.Label>
 
           <Form.Control>
-            <Checkbox labelText="Red" />
-            <Checkbox labelText="White" />
+            <Checkbox labelText="Red" id="red-checkbox" />
+            <Checkbox labelText="White" id="white-checkbox" />
           </Form.Control>
         </Form.Field>
 
         <Form.Field mb={5}>
           <Form.Label>
-            <Heading size={5} style={{ marginBottom: '6px' }}>
+            <Heading size={5} className={styles.heading}>
               Country
             </Heading>
           </Form.Label>
 
           <Form.Control>
-            <Checkbox labelText="France" />
-            <Checkbox labelText="Italy" />
-            <Checkbox labelText="Spain" />
-            <Checkbox labelText="Ukraine" />
-            <Checkbox labelText="United States" />
-            <Checkbox labelText="Australia" />
-            <Checkbox labelText="Argentina" />
-            <Checkbox labelText="Chile" />
-            <Checkbox labelText="Germany" />
-            <Checkbox labelText="South Africa" />
+            <Checkbox labelText="France" id="france-checkbox" />
+            <Checkbox labelText="Italy" id="italy-checkbox" />
+            <Checkbox labelText="Spain" id="spain-checkbox" />
+            <Checkbox labelText="Ukraine" id="ukraine-checkbox" />
+            <Checkbox labelText="United States" id="us-checkbox" />
+            <Checkbox labelText="Australia" id="australia-checkbox" />
+            <Checkbox labelText="Argentina" id="argentina-checkbox" />
+            <Checkbox labelText="Chile" id="chile-checkbox" />
+            <Checkbox labelText="Germany" id="germany-checkbox" />
+            <Checkbox labelText="South Africa" id="sa-checkbox" />
           </Form.Control>
         </Form.Field>
 
         <Form.Field mb={5}>
           <Form.Label>
-            <Heading size={5} style={{ marginBottom: '6px' }}>
+            <Heading size={5} className={styles.heading}>
               Type
             </Heading>
           </Form.Label>
 
           <Form.Control>
-            <Checkbox labelText="Dry" />
-            <Checkbox labelText="Semi-dry" />
-            <Checkbox labelText="Semi-sweet" />
-            <Checkbox labelText="Sweet" />
+            <Checkbox labelText="Dry" id="dry-checkbox" />
+            <Checkbox labelText="Semi-dry" id="sdry-checkbox" />
+            <Checkbox labelText="Semi-sweet" id="ssweet-checkbox" />
+            <Checkbox labelText="Sweet" id="sweet-checkbox" />
           </Form.Control>
         </Form.Field>
 
-        <Form.Field mb={5} style={{ width: '120px' }}>
+        <Form.Field mb={5} className={styles.price_form_field}>
           <Form.Label>
-            <Heading size={5} style={{ marginBottom: '6px' }}>
+            <Heading size={5} className={styles.heading}>
               Price
             </Heading>
           </Form.Label>

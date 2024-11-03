@@ -1,13 +1,11 @@
 import { Card, Columns, Content } from 'react-bulma-components';
+import styles from './ProductCard.module.scss';
 
 export const ProductCard = () => {
   return (
     <Columns.Column size={2}>
-      <Card style={{ width: 300 }}>
-        <Card.Image
-          size="4by3"
-          src="http://bulma.io/images/placeholders/1280x960.png"
-        />
+      <Card className={styles.card}>
+        <Card.Image size="4by3" src="https://placehold.co/600x400" />
 
         <Card.Header>
           <Card.Header.Title>Lorem, ipsum.</Card.Header.Title>

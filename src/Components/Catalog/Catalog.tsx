@@ -1,11 +1,13 @@
-import { ProductList } from '../ProductList';
+import { ProductsList } from '../ProductsList';
 import { Sidebar } from '../Sidebar';
+import styles from './Catalog.module.scss';
 
 export const Catalog = () => {
   return (
-    <div style={{ display: 'flex', alignItems: 'flex-start' }}>
+    <div className={styles.catalog}>
       <Sidebar />
-      <ProductList />
+
+      <ProductsList />
     </div>
   );
 };

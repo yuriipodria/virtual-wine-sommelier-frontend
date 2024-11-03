@@ -1,20 +1,34 @@
 import { Container, Box, Form, Columns, Button } from 'react-bulma-components';
+import homepageStyles from './Homepage.module.scss';
+import headerStyles from '../Header/Header.module.scss';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import { useEffect } from 'react';
 
 export const Homepage = () => {
+  useEffect(() => {
+    document.body.classList.add(homepageStyles.body);
+
+    document
+      .getElementById('header')
+      ?.classList.remove(headerStyles.navbar_shadow);
+
+    return () => {
+      document.body.classList.remove(homepageStyles.body);
+
+      document
+        .getElementById('header')
+        ?.classList.add(headerStyles.navbar_shadow);
+    };
+  }, []);
+
   return (
-    <Container
-      style={{
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        translate: '-50% -50%',
-      }}
-    >
+    <Container className={homepageStyles.container}>
       <form>
         <Columns>
           <Columns.Column size={'half'}>
             <Form.Field>
-              <Box>
+              <Box className={homepageStyles.box}>
                 <Form.Label htmlFor="mood-select">
                   What is your mood? 🎉
                 </Form.Label>
@@ -37,7 +51,7 @@ export const Homepage = () => {
 
           <Columns.Column size={'half'}>
             <Form.Field>
-              <Box>
+              <Box className={homepageStyles.box}>
                 <Form.Label htmlFor="purpose-select">
                   What you gonna do with the wine? 🎯
                 </Form.Label>
@@ -64,10 +78,11 @@ export const Homepage = () => {
 
           <Columns.Column size={'one-third'}>
             <Form.Field>
-              <Box>
+              <Box className={homepageStyles.box}>
                 <Form.Label htmlFor="color-select">
                   What about the color? 🌸
                 </Form.Label>
+
                 <Form.Control>
                   <Form.Select id="color-select">
                     <option value="">
@@ -83,10 +98,11 @@ export const Homepage = () => {
 
           <Columns.Column size={'one-third'}>
             <Form.Field>
-              <Box>
+              <Box className={homepageStyles.box}>
                 <Form.Label htmlFor="country-select">
                   What country? 🌎
                 </Form.Label>
+
                 <Form.Control>
                   <Form.Select id="country-select">
                     <option value="">
@@ -110,10 +126,11 @@ export const Homepage = () => {
 
           <Columns.Column size={'one-third'}>
             <Form.Field>
-              <Box>
+              <Box className={homepageStyles.box}>
                 <Form.Label htmlFor="type-select">
                   Which type do you choose? 🥂
                 </Form.Label>
+
                 <Form.Control>
                   <Form.Select id="type-select">
                     <option value="">
@@ -131,13 +148,12 @@ export const Homepage = () => {
 
           <Columns.Column>
             <Form.Field>
-              <Box>
+              <Box className={homepageStyles.box}>
                 <Form.Label htmlFor="price-input">
                   What is your budget? 💸
                 </Form.Label>
-                <Form.Control
-                  style={{ display: 'flex', gap: '12px', alignItems: 'center' }}
-                >
+
+                <Form.Control className={homepageStyles.price_form_control}>
                   <p>From</p>
                   <Form.Input id="price-input" />
                   <p>To</p>
@@ -153,9 +169,10 @@ export const Homepage = () => {
                 <Button
                   color="primary"
                   textSize={4}
-                  style={{ width: '100%', height: '100%' }}
+                  className={homepageStyles.button}
                 >
-                  Search!
+                  <p>Search</p>
+                  <FontAwesomeIcon icon={faSearch} />
                 </Button>
               </Form.Control>
             </Form.Field>
