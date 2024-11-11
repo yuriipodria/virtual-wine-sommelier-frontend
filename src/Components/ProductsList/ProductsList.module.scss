@@ -1,0 +1,10 @@
+@use 'bulma/sass/utilities/mixins';
+@use '../../variables.scss' as *;
+
+.columns {
+  padding: $bulma-spacing-5;
+
+  @include mixins.tablet {
+    padding: $bulma-spacing-6;
+  }
+}

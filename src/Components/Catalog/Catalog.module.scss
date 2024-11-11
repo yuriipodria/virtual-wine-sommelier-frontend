@@ -1,4 +1,21 @@
+@use 'bulma/sass/utilities/mixins';
+
 .catalog {
+  @include mixins.tablet {
+    display: flex;
+    align-items: start;
+  }
+}
+
+.button {
   display: flex;
-  align-items: start;
+  width: min-content;
+  align-items: center;
+  gap: 6px;
+}
+
+.block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }

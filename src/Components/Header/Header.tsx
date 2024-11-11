@@ -1,8 +1,9 @@
 import { Navbar, Heading } from 'react-bulma-components';
+import cn from 'classnames';
 import styles from './Header.module.scss';
 import { Link } from 'react-router-dom';
 import { SignUpModal } from '../SignUpModal';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { LogInModal } from '../LogInModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -16,27 +17,37 @@ import {
 export const Header = () => {
   const [isSignUpModalShown, setIsSignUpModalShown] = useState(false);
   const [isLogInModalShown, setIsLogInModalShown] = useState(false);
+  const [isMenuShown, setIsMenuShown] = useState(false);
+
+  const hideMenu = useCallback(() => setIsMenuShown(false), []);
 
   return (
     <>
       <Navbar
-        id="header"
-        className={`${styles.navbar_shadow} ${styles.navbar_overflow}`}
+        className={`${styles.navbar_shadow} ${styles.navbar}`}
         color="primary"
       >
         <Navbar.Brand>
-          <Navbar.Item renderAs={Link} to="/">
-            <Heading size={3} className="has-text-white">
+          <Navbar.Item renderAs={Link} to="/" onClick={hideMenu}>
+            <Heading size={3} textColor="white">
               wine
             </Heading>
           </Navbar.Item>
+
+          <Navbar.Burger
+            textColor="white"
+            onClick={() => setIsMenuShown(current => !current)}
+          />
         </Navbar.Brand>
 
-        <Navbar.Burger />
-
-        <Navbar.Menu>
+        <Navbar.Menu className={cn({ 'is-active': isMenuShown })}>
           <Navbar.Container>
-            <Navbar.Item className={styles.navbar_item} renderAs={Link} to="/">
+            <Navbar.Item
+              className={styles.navbar_item}
+              renderAs={Link}
+              to="/"
+              onClick={hideMenu}
+            >
               <FontAwesomeIcon icon={faHome} />
               <p className={styles.icon_p}>Home</p>
             </Navbar.Item>
@@ -45,12 +56,13 @@ export const Header = () => {
               className={styles.navbar_item}
               renderAs={Link}
               to="/catalog"
+              onClick={hideMenu}
             >
               <FontAwesomeIcon icon={faList} />
               <p className={styles.icon_p}>Catalog</p>
             </Navbar.Item>
 
-            <Navbar.Item className={styles.navbar_item}>
+            <Navbar.Item className={styles.navbar_item} onClick={hideMenu}>
               <FontAwesomeIcon icon={faShoppingCart} />
               <p className={styles.icon_p}>Cart</p>
             </Navbar.Item>
@@ -62,7 +74,7 @@ export const Header = () => {
               onClick={() => setIsSignUpModalShown(true)}
             >
               <FontAwesomeIcon icon={faUserCircle} />
-              <p>Sign Up</p>
+              <p className={styles.icon_p_auth}>Sign Up</p>
             </Navbar.Item>
 
             <Navbar.Item
@@ -70,7 +82,7 @@ export const Header = () => {
               onClick={() => setIsLogInModalShown(true)}
             >
               <FontAwesomeIcon icon={faSignIn} />
-              Log In
+              <p className={styles.icon_p_auth}>Log In</p>
             </Navbar.Item>
           </Navbar.Container>
         </Navbar.Menu>

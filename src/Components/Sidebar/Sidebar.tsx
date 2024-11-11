@@ -3,10 +3,10 @@ import { Checkbox } from '../Checkbox';
 import styles from './Sidebar.module.scss';
 
 export const Sidebar = () => (
-  <Block className={styles.block} px={6} py={4}>
+  <Block className={styles.block} mb="0">
     <aside>
       <form className={styles.form}>
-        <Form.Field mb={5}>
+        <Form.Field className={styles.field} mb={5}>
           <Form.Label>
             <Heading size={5} className={styles.heading}>
               Mood
@@ -22,7 +22,7 @@ export const Sidebar = () => (
           </Form.Control>
         </Form.Field>
 
-        <Form.Field mb={5}>
+        <Form.Field className={styles.field} mb={5}>
           <Form.Label>
             <Heading size={5} className={styles.heading}>
               Purpose
@@ -38,7 +38,7 @@ export const Sidebar = () => (
           </Form.Control>
         </Form.Field>
 
-        <Form.Field mb={5}>
+        <Form.Field className={styles.field} mb={5}>
           <Form.Label>
             <Heading size={5} className={styles.heading}>
               Color
@@ -51,7 +51,7 @@ export const Sidebar = () => (
           </Form.Control>
         </Form.Field>
 
-        <Form.Field mb={5}>
+        <Form.Field className={styles.field} mb={5}>
           <Form.Label>
             <Heading size={5} className={styles.heading}>
               Country
@@ -72,7 +72,7 @@ export const Sidebar = () => (
           </Form.Control>
         </Form.Field>
 
-        <Form.Field mb={5}>
+        <Form.Field className={styles.field} mb={5}>
           <Form.Label>
             <Heading size={5} className={styles.heading}>
               Type
@@ -87,7 +87,10 @@ export const Sidebar = () => (
           </Form.Control>
         </Form.Field>
 
-        <Form.Field mb={5} className={styles.price_form_field}>
+        <Form.Field
+          className={`${styles.field} ${styles.price_form_field}`}
+          mb={5}
+        >
           <Form.Label>
             <Heading size={5} className={styles.heading}>
               Price
@@ -103,8 +106,13 @@ export const Sidebar = () => (
         </Form.Field>
 
         <Form.Field>
-          <Form.Control textAlign="center">
+          <Form.Control
+            className={styles.button_group}
+            renderAs={Button.Group}
+            textAlign="center"
+          >
             <Button color="primary">Apply</Button>
+            <Button>Reset</Button>
           </Form.Control>
         </Form.Field>
       </form>

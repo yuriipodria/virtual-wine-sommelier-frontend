@@ -23,10 +23,10 @@ export const Homepage = () => {
   }, []);
 
   return (
-    <Container className={homepageStyles.container}>
+    <Container className={homepageStyles.container} mt={3}>
       <form>
         <Columns>
-          <Columns.Column size={'half'}>
+          <Columns.Column size={12} desktop={{ size: 'half' }}>
             <Form.Field>
               <Box className={homepageStyles.box}>
                 <Form.Label htmlFor="mood-select">
@@ -49,7 +49,7 @@ export const Homepage = () => {
             </Form.Field>
           </Columns.Column>
 
-          <Columns.Column size={'half'}>
+          <Columns.Column size={12} desktop={{ size: 'half' }}>
             <Form.Field>
               <Box className={homepageStyles.box}>
                 <Form.Label htmlFor="purpose-select">
@@ -76,7 +76,7 @@ export const Homepage = () => {
             </Form.Field>
           </Columns.Column>
 
-          <Columns.Column size={'one-third'}>
+          <Columns.Column size={12} desktop={{ size: 'one-third' }}>
             <Form.Field>
               <Box className={homepageStyles.box}>
                 <Form.Label htmlFor="color-select">
@@ -96,7 +96,7 @@ export const Homepage = () => {
             </Form.Field>
           </Columns.Column>
 
-          <Columns.Column size={'one-third'}>
+          <Columns.Column size={12} desktop={{ size: 'one-third' }}>
             <Form.Field>
               <Box className={homepageStyles.box}>
                 <Form.Label htmlFor="country-select">
@@ -124,7 +124,7 @@ export const Homepage = () => {
             </Form.Field>
           </Columns.Column>
 
-          <Columns.Column size={'one-third'}>
+          <Columns.Column size={12} desktop={{ size: 'one-third' }}>
             <Form.Field>
               <Box className={homepageStyles.box}>
                 <Form.Label htmlFor="type-select">
@@ -146,7 +146,7 @@ export const Homepage = () => {
             </Form.Field>
           </Columns.Column>
 
-          <Columns.Column>
+          <Columns.Column size={12} desktop={{ size: 'half' }}>
             <Form.Field>
               <Box className={homepageStyles.box}>
                 <Form.Label htmlFor="price-input">
@@ -163,7 +163,11 @@ export const Homepage = () => {
             </Form.Field>
           </Columns.Column>
 
-          <Columns.Column alignContent="center">
+          <Columns.Column
+            alignContent="center"
+            size={12}
+            desktop={{ size: 'half' }}
+          >
             <Form.Field>
               <Form.Control>
                 <Button

@@ -1,25 +1,48 @@
+@use 'bulma/sass/utilities/mixins';
+@use 'bulma/sass/utilities/initial-variables' as *;
+@use '../../variables.scss' as *;
+
 .navbar_shadow {
   box-shadow: 0 3px 6px #bdbdbd;
 }
 
-.navbar_overflow {
-  overflow: hidden;
+.navbar {
+  position: sticky;
+  top: 0;
+  height: $header-height;
+
+  @include mixins.desktop {
+    overflow: hidden;
+  }
 }
 
 .navbar_item {
-  gap: 5px;
-  transition: transform 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 
-  &:hover {
-    transform: scale(1.1);
+  @include mixins.desktop {
+    transition: transform 0.2s ease;
+
+    &:hover {
+      transform: scale(1.1);
+
+      & .icon_p {
+        font-size: $size-5;
+      }
+    }
   }
 }
 
 .icon_p {
-  font-size: 0;
-  transition: all 0.4s ease;
+  font-size: $size-5;
+
+  @include mixins.desktop {
+    font-size: 0;
+    transition: all 0.4s ease;
+  }
 }
 
-.navbar_item:hover .icon_p {
-  font-size: large;
+.icon_p_auth {
+  font-size: $size-5;
 }
