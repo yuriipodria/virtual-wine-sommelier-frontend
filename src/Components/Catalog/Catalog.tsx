@@ -7,11 +7,24 @@ import { Sidebar } from '../Sidebar';
 import { Block, Button, Pagination } from 'react-bulma-components';
 
 export const Catalog = () => {
-  const BULMA_MOBILE_TABLET_BREAKPOINT = 769;
+  const BULMA_MOBILE_TABLET_BREAKPOINT = 768;
+  const BULMA_TABLET_DESKTOP_BREAKPOINT = 1023;
+  const BULMA_DESKTOP_WIDESCREEN_BREAKPOINT = 1215;
+
+  const getPerPage = useCallback((width: number) => {
+    if (width > BULMA_DESKTOP_WIDESCREEN_BREAKPOINT) {
+      return 25;
+    } else if (width > BULMA_TABLET_DESKTOP_BREAKPOINT) {
+      return 20;
+    } else {
+      return 15;
+    }
+  }, []);
+
+  const [perPage, setPerPage] = useState(getPerPage(window.innerWidth));
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [areFiltersShown, setAreFiltersShown] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const perPage = 30;
 
   const productsFromServer = [
     0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
@@ -34,16 +47,19 @@ export const Catalog = () => {
   }, []);
 
   useEffect(() => {
-    const handleResize = () => setWindowWidth(window.innerWidth);
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+      setPerPage(getPerPage(window.innerWidth));
+    };
 
     window.addEventListener('resize', handleResize);
 
     return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  }, [getPerPage]);
 
   return (
-    <div className={styles.catalog}>
-      {windowWidth < BULMA_MOBILE_TABLET_BREAKPOINT && (
+    <Block className={styles.catalog}>
+      {windowWidth > BULMA_MOBILE_TABLET_BREAKPOINT || (
         <Button
           className={styles.button}
           mb="0"
@@ -56,7 +72,7 @@ export const Catalog = () => {
         </Button>
       )}
 
-      {(windowWidth >= BULMA_MOBILE_TABLET_BREAKPOINT || areFiltersShown) && (
+      {(windowWidth > BULMA_MOBILE_TABLET_BREAKPOINT || areFiltersShown) && (
         <Sidebar />
       )}
 
@@ -70,8 +86,9 @@ export const Catalog = () => {
           showFirstLast
           align="center"
           pb={5}
+          color="primary"
         />
       </Block>
-    </div>
+    </Block>
   );
 };

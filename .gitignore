@@ -24,4 +24,3 @@ yarn-error.log*
 .vscode
 
 src/Components/ProductsContext
-src/Components/ProductPage

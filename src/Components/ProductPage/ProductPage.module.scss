@@ -1,0 +1,57 @@
+@use '../../variables.scss' as *;
+@use 'bulma/sass/utilities/mixins';
+
+.outer_block {
+  margin: $bulma-spacing-3;
+  margin-top: $bulma-spacing-5;
+
+  @include mixins.tablet {
+    margin: $bulma-spacing-5;
+  }
+
+  @include mixins.desktop {
+    margin: $bulma-spacing-6;
+  }
+}
+
+.image_block {
+  @include mixins.tablet {
+    display: flex;
+    align-content: center;
+    gap: 12px;
+  }
+
+  @include mixins.desktop {
+    gap: 24px;
+  }
+}
+
+.image {
+  margin-bottom: $bulma-spacing-5;
+
+  @include mixins.tablet {
+    margin-bottom: 0;
+  }
+}
+
+.price_tags_block {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  @include mixins.widescreen {
+    margin: $bulma-spacing-4 0;
+  }
+}
+
+.tags_block {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.button {
+  display: flex;
+  width: 100%;
+  gap: 7px;
+}
