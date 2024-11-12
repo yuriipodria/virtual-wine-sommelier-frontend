@@ -17,7 +17,7 @@ export const ProductPage = () => {
     <Block className={styles.outer_block}>
       <Heading size={2}>Lorem, ipsum.</Heading>
 
-      <Block className={styles.image_block}>
+      <Block className={styles.image_block} mb={6}>
         <Image className={styles.image} src="https://placehold.co/600x400" />
 
         <Block className={styles.price_tags_block}>
