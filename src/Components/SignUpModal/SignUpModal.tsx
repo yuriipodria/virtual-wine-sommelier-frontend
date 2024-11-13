@@ -1,71 +1,528 @@
-import { Button, Form, Modal } from 'react-bulma-components';
+import { ChangeEvent, useCallback, useState } from 'react';
+import { Button, Columns, Form, Modal } from 'react-bulma-components';
+import { registerUser } from '../../api/users';
+import { RegisterData } from '../../types/RegisterData';
 
 interface Props {
   isShown: boolean;
   setIsShown: (value: boolean) => void;
 }
 
-export const SignUpModal: React.FC<Props> = ({ isShown, setIsShown }) => (
-  <Modal showClose={false} show={isShown} onClose={() => setIsShown(false)}>
-    <Modal.Card>
-      <Modal.Card.Header>
-        <Modal.Card.Title>Sign Up</Modal.Card.Title>
-      </Modal.Card.Header>
+interface Errors {
+  firstNameRequired: string;
+  lastNameRequired: string;
+  emailRequired: string;
+  emailFormedIncorrectly: string;
+  passwordRequired: string;
+  passwordLength: string;
+  passwordFormedIncorrectly: string;
+  repeatPasswordRequired: string;
+  passwordsDontMatch: string;
+  streetRequired: string;
+  cityRequired: string;
+  areaRequired: string;
+  zipCodeRequired: string;
+}
 
-      <form>
-        <Modal.Card.Body>
-          <Form.Field>
-            <Form.Label htmlFor="username-input">Username</Form.Label>
+export const SignUpModal: React.FC<Props> = ({ isShown, setIsShown }) => {
+  const [userData, setUserData] = useState<RegisterData>({
+    email: '',
+    password: '',
+    repeatPassword: '',
+    firstName: '',
+    lastName: '',
+    shippingAddress: {
+      street: '',
+      city: '',
+      area: '',
+      zipCode: '',
+    },
+  });
 
-            <Form.Control>
-              <Form.Input id="username-input" placeholder="johndoe123" />
-            </Form.Control>
-          </Form.Field>
+  const [errors, setErrors] = useState<Errors>({
+    firstNameRequired: '',
+    lastNameRequired: '',
+    emailRequired: '',
+    emailFormedIncorrectly: '',
+    passwordRequired: '',
+    passwordLength: '',
+    passwordFormedIncorrectly: '',
+    repeatPasswordRequired: '',
+    passwordsDontMatch: '',
+    streetRequired: '',
+    cityRequired: '',
+    areaRequired: '',
+    zipCodeRequired: '',
+  });
 
-          <Form.Field>
-            <Form.Label htmlFor="email-input">Email</Form.Label>
+  const [isLoading, setIsLoading] = useState(false);
 
-            <Form.Control>
-              <Form.Input id="email-input" placeholder="example@gmail.com" />
-            </Form.Control>
-          </Form.Field>
+  const validateEmail = useCallback((email: string) => {
+    return !!email.toLowerCase().match(
+      // eslint-disable-next-line max-len
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+    );
+  }, []);
 
-          <Form.Field>
-            <Form.Label htmlFor="password-input">Password</Form.Label>
+  const validatePassword = useCallback((password: string) => {
+    return !!password.match(
+      /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!-]).{8,35}$/,
+    );
+  }, []);
 
-            <Form.Control>
-              <Form.Input id="password-input" placeholder="Password" />
-            </Form.Control>
-          </Form.Field>
+  const handleFirstNameChange = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      setUserData(currentData => ({
+        ...currentData,
+        firstName: e.target.value,
+      }));
 
-          <Form.Field>
-            <Form.Label htmlFor="password-confirm-input">
-              Confirm password
-            </Form.Label>
+      setErrors(currentErrors => ({ ...currentErrors, firstNameRequired: '' }));
+    },
+    [],
+  );
 
-            <Form.Control>
-              <Form.Input
-                id="password-confirm-input"
-                placeholder="Confirm password"
-              />
-            </Form.Control>
-          </Form.Field>
-        </Modal.Card.Body>
+  const handleLastNameChange = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      setUserData(currentData => ({
+        ...currentData,
+        lastName: e.target.value,
+      }));
 
-        <Modal.Card.Footer renderAs={Button.Group} align="center">
-          <Form.Field kind="group">
-            <Form.Control>
-              <Button color="success" textColor="white">
-                Sign Up
-              </Button>
-            </Form.Control>
+      setErrors(currentErrors => ({ ...currentErrors, lastNameRequired: '' }));
+    },
+    [],
+  );
 
-            <Form.Control>
-              <Button onClick={() => setIsShown(false)}>Cancel</Button>
-            </Form.Control>
-          </Form.Field>
-        </Modal.Card.Footer>
-      </form>
-    </Modal.Card>
-  </Modal>
-);
+  const handleEmailChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    setUserData(currentData => ({ ...currentData, email: e.target.value }));
+
+    setErrors(currentErrors => ({
+      ...currentErrors,
+      emailRequired: '',
+      emailFormedIncorrectly: '',
+    }));
+  }, []);
+
+  const handlePasswordChange = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      setUserData(currentData => ({
+        ...currentData,
+        password: e.target.value,
+      }));
+
+      setErrors(currentErrors => ({
+        ...currentErrors,
+        passwordRequired: '',
+        passwordLength: '',
+        passwordFormedIncorrectly: '',
+      }));
+    },
+    [],
+  );
+
+  const handleRepeatPasswordChange = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      setUserData(currentData => ({
+        ...currentData,
+        repeatPassword: e.target.value,
+      }));
+
+      setErrors(currentErrors => ({
+        ...currentErrors,
+        repeatPasswordRequired: '',
+        passwordsDontMatch: '',
+      }));
+    },
+    [],
+  );
+
+  const handleStreetChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    setUserData(currentData => ({
+      ...currentData,
+      shippingAddress: {
+        ...currentData.shippingAddress,
+        street: e.target.value,
+      },
+    }));
+
+    setErrors(currentErrors => ({ ...currentErrors, streetRequired: '' }));
+  }, []);
+
+  const handleCityChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    setUserData(currentData => ({
+      ...currentData,
+      shippingAddress: {
+        ...currentData.shippingAddress,
+        city: e.target.value,
+      },
+    }));
+
+    setErrors(currentErrors => ({ ...currentErrors, cityRequired: '' }));
+  }, []);
+
+  const handleAreaChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    setUserData(currentData => ({
+      ...currentData,
+      shippingAddress: {
+        ...currentData.shippingAddress,
+        area: e.target.value,
+      },
+    }));
+
+    setErrors(currentErrors => ({ ...currentErrors, areaRequired: '' }));
+  }, []);
+
+  const handleZipCodeChange = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      setUserData(currentData => ({
+        ...currentData,
+        shippingAddress: {
+          ...currentData.shippingAddress,
+          zipCode: e.target.value,
+        },
+      }));
+
+      setErrors(currentErrors => ({ ...currentErrors, zipCodeRequired: '' }));
+    },
+    [],
+  );
+
+  const handleSubmit = useCallback(
+    async (
+      e: React.FormEvent<HTMLFormElement>,
+      newUserData: RegisterData,
+      inputErrors: Errors,
+    ) => {
+      e.preventDefault();
+
+      const newErrors = { ...inputErrors };
+
+      if (!newUserData.firstName) {
+        newErrors.firstNameRequired = 'First name is required';
+      }
+
+      if (!newUserData.lastName) {
+        newErrors.lastNameRequired = 'Last name is required';
+      }
+
+      if (!newUserData.email) {
+        newErrors.emailRequired = 'Email is required';
+      } else if (!validateEmail(newUserData.email)) {
+        newErrors.emailFormedIncorrectly = 'Please enter a valid email address';
+      }
+
+      if (!newUserData.password) {
+        newErrors.passwordRequired = 'Password is required';
+      } else if (
+        newUserData.password.length < 8 ||
+        newUserData.password.length > 35
+      ) {
+        newErrors.passwordLength =
+          'Password should be between 8 and 35 characters';
+      } else if (!validatePassword(newUserData.password)) {
+        newErrors.passwordFormedIncorrectly =
+          'Password must contain at least one digit, one lowercase letter, ' +
+          'one uppercase letter, and one special character (@#$%^&+=!-)';
+      }
+
+      if (!newUserData.repeatPassword) {
+        newErrors.repeatPasswordRequired = 'Repeat password required';
+      } else if (newUserData.password !== newUserData.repeatPassword) {
+        newErrors.passwordsDontMatch = 'Passwords do not match';
+      }
+
+      if (!newUserData.shippingAddress.street) {
+        newErrors.streetRequired = 'Street is required';
+      }
+
+      if (!newUserData.shippingAddress.city) {
+        newErrors.cityRequired = 'City is required';
+      }
+
+      if (!newUserData.shippingAddress.zipCode) {
+        newErrors.zipCodeRequired = 'ZIP code is required';
+      }
+
+      if (!newUserData.shippingAddress.area) {
+        newErrors.areaRequired = 'Area is required';
+      }
+
+      if (Object.values(newErrors).some(error => error)) {
+        setErrors(newErrors);
+
+        return;
+      }
+
+      try {
+        setIsLoading(true);
+        await registerUser(newUserData);
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.log(error);
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [validateEmail, validatePassword],
+  );
+
+  return (
+    <Modal showClose={false} show={isShown} onClose={() => setIsShown(false)}>
+      <Modal.Card>
+        <Modal.Card.Header>
+          <Modal.Card.Title>Sign Up</Modal.Card.Title>
+        </Modal.Card.Header>
+
+        <form onSubmit={e => handleSubmit(e, userData, errors)}>
+          <Modal.Card.Body>
+            <Columns>
+              <Columns.Column size="half">
+                <Form.Field>
+                  <Form.Label htmlFor="first-name-input">First name</Form.Label>
+
+                  <Form.Control>
+                    <Form.Input
+                      id="first-name-input"
+                      placeholder="John"
+                      color={errors.firstNameRequired ? 'danger' : ''}
+                      value={userData.firstName}
+                      onChange={handleFirstNameChange}
+                    />
+
+                    {errors.firstNameRequired && (
+                      <p className="help is-danger">
+                        {errors.firstNameRequired}
+                      </p>
+                    )}
+                  </Form.Control>
+                </Form.Field>
+              </Columns.Column>
+
+              <Columns.Column size="half">
+                <Form.Field>
+                  <Form.Label htmlFor="last-name-input">Last name</Form.Label>
+
+                  <Form.Control>
+                    <Form.Input
+                      id="last-name-input"
+                      placeholder="Doe"
+                      color={errors.lastNameRequired ? 'danger' : ''}
+                      value={userData.lastName}
+                      onChange={handleLastNameChange}
+                    />
+
+                    {errors.lastNameRequired && (
+                      <p className="help is-danger">
+                        {errors.lastNameRequired}
+                      </p>
+                    )}
+                  </Form.Control>
+                </Form.Field>
+              </Columns.Column>
+
+              <Columns.Column size={12}>
+                <Form.Field>
+                  <Form.Label htmlFor="email-input">Email</Form.Label>
+
+                  <Form.Control>
+                    <Form.Input
+                      id="email-input"
+                      placeholder="example@gmail.com"
+                      color={
+                        errors.emailRequired || errors.emailFormedIncorrectly
+                          ? 'danger'
+                          : ''
+                      }
+                      value={userData.email}
+                      onChange={handleEmailChange}
+                    />
+
+                    {errors.emailRequired && (
+                      <p className="help is-danger">{errors.emailRequired}</p>
+                    )}
+
+                    {errors.emailFormedIncorrectly && (
+                      <p className="help is-danger">
+                        {errors.emailFormedIncorrectly}
+                      </p>
+                    )}
+                  </Form.Control>
+                </Form.Field>
+              </Columns.Column>
+
+              <Columns.Column size="half">
+                <Form.Field>
+                  <Form.Label htmlFor="password-input">Password</Form.Label>
+
+                  <Form.Control>
+                    <Form.Input
+                      id="password-input"
+                      type="password"
+                      placeholder="Password"
+                      color={
+                        errors.passwordFormedIncorrectly ||
+                        errors.passwordLength ||
+                        errors.passwordRequired
+                          ? 'danger'
+                          : ''
+                      }
+                      value={userData.password}
+                      onChange={handlePasswordChange}
+                    />
+
+                    {errors.passwordRequired && (
+                      <p className="help is-danger">
+                        {errors.passwordRequired}
+                      </p>
+                    )}
+
+                    {errors.passwordLength && (
+                      <p className="help is-danger">{errors.passwordLength}</p>
+                    )}
+
+                    {errors.passwordFormedIncorrectly && (
+                      <p className="help is-danger">
+                        {errors.passwordFormedIncorrectly}
+                      </p>
+                    )}
+                  </Form.Control>
+                </Form.Field>
+              </Columns.Column>
+
+              <Columns.Column size="half">
+                <Form.Field>
+                  <Form.Label htmlFor="password-confirm-input">
+                    Confirm password
+                  </Form.Label>
+
+                  <Form.Control>
+                    <Form.Input
+                      id="password-confirm-input"
+                      type="password"
+                      placeholder="Confirm password"
+                      color={
+                        errors.repeatPasswordRequired ||
+                        errors.passwordsDontMatch
+                          ? 'danger'
+                          : ''
+                      }
+                      value={userData.repeatPassword}
+                      onChange={handleRepeatPasswordChange}
+                    />
+
+                    {errors.repeatPasswordRequired && (
+                      <p className="help is-danger">
+                        {errors.repeatPasswordRequired}
+                      </p>
+                    )}
+
+                    {errors.passwordsDontMatch && (
+                      <p className="help is-danger">
+                        {errors.passwordsDontMatch}
+                      </p>
+                    )}
+                  </Form.Control>
+                </Form.Field>
+              </Columns.Column>
+
+              <Columns.Column size="half">
+                <Form.Field>
+                  <Form.Label htmlFor="street-input">Street</Form.Label>
+
+                  <Form.Control>
+                    <Form.Input
+                      id="street-input"
+                      placeholder="123 Maple Street"
+                      color={errors.streetRequired ? 'danger' : ''}
+                      value={userData.shippingAddress.street}
+                      onChange={handleStreetChange}
+                    />
+
+                    {errors.streetRequired && (
+                      <p className="help is-danger">{errors.streetRequired}</p>
+                    )}
+                  </Form.Control>
+                </Form.Field>
+              </Columns.Column>
+
+              <Columns.Column size="half">
+                <Form.Field>
+                  <Form.Label htmlFor="area-input">Area</Form.Label>
+
+                  <Form.Control>
+                    <Form.Input
+                      id="area-input"
+                      placeholder="Downtown"
+                      color={errors.areaRequired ? 'danger' : ''}
+                      value={userData.shippingAddress.area}
+                      onChange={handleAreaChange}
+                    />
+
+                    {errors.areaRequired && (
+                      <p className="help is-danger">{errors.areaRequired}</p>
+                    )}
+                  </Form.Control>
+                </Form.Field>
+              </Columns.Column>
+
+              <Columns.Column size="half">
+                <Form.Field>
+                  <Form.Label htmlFor="zip-code-input">ZIP Code</Form.Label>
+
+                  <Form.Control>
+                    <Form.Input
+                      id="zip-code-input"
+                      placeholder="12345"
+                      color={errors.zipCodeRequired ? 'danger' : ''}
+                      value={userData.shippingAddress.zipCode}
+                      onChange={handleZipCodeChange}
+                    />
+
+                    {errors.zipCodeRequired && (
+                      <p className="help is-danger">{errors.zipCodeRequired}</p>
+                    )}
+                  </Form.Control>
+                </Form.Field>
+              </Columns.Column>
+
+              <Columns.Column size="half">
+                <Form.Field>
+                  <Form.Label htmlFor="city-input">City</Form.Label>
+
+                  <Form.Control>
+                    <Form.Input
+                      id="city-input"
+                      placeholder="Springfield"
+                      color={errors.cityRequired ? 'danger' : ''}
+                      value={userData.shippingAddress.city}
+                      onChange={handleCityChange}
+                    />
+
+                    {errors.cityRequired && (
+                      <p className="help is-danger">{errors.cityRequired}</p>
+                    )}
+                  </Form.Control>
+                </Form.Field>
+              </Columns.Column>
+            </Columns>
+          </Modal.Card.Body>
+
+          <Modal.Card.Footer renderAs={Button.Group} align="center">
+            <Form.Field kind="group">
+              <Form.Control>
+                <Button color="success" textColor="white" loading={isLoading}>
+                  Sign Up
+                </Button>
+              </Form.Control>
+
+              <Form.Control>
+                <Button onClick={() => setIsShown(false)}>Cancel</Button>
+              </Form.Control>
+            </Form.Field>
+          </Modal.Card.Footer>
+        </form>
+      </Modal.Card>
+    </Modal>
+  );
+};

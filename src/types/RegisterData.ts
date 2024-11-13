@@ -1,5 +1,4 @@
-export interface User {
-  id: number;
+export interface RegisterData {
   email: string;
   password: string;
   repeatPassword: string;
