@@ -2,6 +2,7 @@ import { ChangeEvent, useCallback, useState } from 'react';
 import { Button, Columns, Form, Modal } from 'react-bulma-components';
 import { registerUser } from '../../api/users';
 import { RegisterData } from '../../types/RegisterData';
+import styles from './SignUpModal.module.scss';
 
 interface Props {
   isShown: boolean;
@@ -22,6 +23,7 @@ interface Errors {
   cityRequired: string;
   areaRequired: string;
   zipCodeRequired: string;
+  zipCodeLength: string;
 }
 
 export const SignUpModal: React.FC<Props> = ({ isShown, setIsShown }) => {
@@ -53,6 +55,7 @@ export const SignUpModal: React.FC<Props> = ({ isShown, setIsShown }) => {
     cityRequired: '',
     areaRequired: '',
     zipCodeRequired: '',
+    zipCodeLength: '',
   });
 
   const [isLoading, setIsLoading] = useState(false);
@@ -223,7 +226,7 @@ export const SignUpModal: React.FC<Props> = ({ isShown, setIsShown }) => {
       } else if (!validatePassword(newUserData.password)) {
         newErrors.passwordFormedIncorrectly =
           'Password must contain at least one digit, one lowercase letter, ' +
-          'one uppercase letter, and one special character (@#$%^&+=!-)';
+          'one uppercase letter and one special character (@#$%^&+=!-)';
       }
 
       if (!newUserData.repeatPassword) {
@@ -242,6 +245,8 @@ export const SignUpModal: React.FC<Props> = ({ isShown, setIsShown }) => {
 
       if (!newUserData.shippingAddress.zipCode) {
         newErrors.zipCodeRequired = 'ZIP code is required';
+      } else if (newUserData.shippingAddress.zipCode.length !== 5) {
+        newErrors.zipCodeLength = 'ZIP code must consist of 5 characters';
       }
 
       if (!newUserData.shippingAddress.area) {
@@ -269,7 +274,7 @@ export const SignUpModal: React.FC<Props> = ({ isShown, setIsShown }) => {
 
   return (
     <Modal showClose={false} show={isShown} onClose={() => setIsShown(false)}>
-      <Modal.Card>
+      <Modal.Card className={styles.modal}>
         <Modal.Card.Header>
           <Modal.Card.Title>Sign Up</Modal.Card.Title>
         </Modal.Card.Header>
@@ -474,13 +479,21 @@ export const SignUpModal: React.FC<Props> = ({ isShown, setIsShown }) => {
                     <Form.Input
                       id="zip-code-input"
                       placeholder="12345"
-                      color={errors.zipCodeRequired ? 'danger' : ''}
+                      color={
+                        errors.zipCodeRequired || errors.zipCodeLength
+                          ? 'danger'
+                          : ''
+                      }
                       value={userData.shippingAddress.zipCode}
                       onChange={handleZipCodeChange}
                     />
 
                     {errors.zipCodeRequired && (
                       <p className="help is-danger">{errors.zipCodeRequired}</p>
+                    )}
+
+                    {errors.zipCodeLength && (
+                      <p className="help is-danger">{errors.zipCodeLength}</p>
                     )}
                   </Form.Control>
                 </Form.Field>
@@ -511,7 +524,7 @@ export const SignUpModal: React.FC<Props> = ({ isShown, setIsShown }) => {
           <Modal.Card.Footer renderAs={Button.Group} align="center">
             <Form.Field kind="group">
               <Form.Control>
-                <Button color="success" textColor="white" loading={isLoading}>
+                <Button color="primary" textColor="white" loading={isLoading}>
                   Sign Up
                 </Button>
               </Form.Control>

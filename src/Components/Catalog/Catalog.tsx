@@ -5,6 +5,9 @@ import { faFilter } from '@fortawesome/free-solid-svg-icons';
 import { useCallback, useEffect, useState } from 'react';
 import { Sidebar } from '../Sidebar';
 import { Block, Button, Pagination } from 'react-bulma-components';
+import { useSearchParams } from 'react-router-dom';
+import { SearchParams } from '../../types/SearchParams';
+import { getSearchWith } from '../../utils/getSearchWith';
 
 export const Catalog = () => {
   const BULMA_MOBILE_TABLET_BREAKPOINT = 768;
@@ -24,7 +27,17 @@ export const Catalog = () => {
   const [perPage, setPerPage] = useState(getPerPage(window.innerWidth));
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [areFiltersShown, setAreFiltersShown] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const currentPage = +(searchParams.get('page') || 1);
+
+  const setSearchWith = useCallback(
+    (params: SearchParams) => {
+      const search = getSearchWith(params, searchParams);
+
+      setSearchParams(search);
+    },
+    [searchParams, setSearchParams],
+  );
 
   const productsFromServer = [
     0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
@@ -41,10 +54,14 @@ export const Catalog = () => {
 
   const totalPages = Math.ceil(preparedProducts.length / perPage);
 
-  const onPageChange = useCallback((page: number) => {
-    setCurrentPage(page);
-    window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
-  }, []);
+  const onPageChange = useCallback(
+    (page: number) => {
+      setSearchWith({ page });
+
+      window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+    },
+    [setSearchWith],
+  );
 
   useEffect(() => {
     const handleResize = () => {

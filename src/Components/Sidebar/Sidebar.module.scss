@@ -10,14 +10,14 @@
 
   @include mixins.tablet {
     min-width: max-content;
-    background-color: #fff1f3;
+    background-color: #f4f4f4;
     border-radius: 0;
     border: none;
     margin: 0;
     position: sticky;
     height: calc(100vh - $header-height);
     top: $header-height;
-    overflow: scroll;
+    overflow-y: scroll;
     position: sticky;
   }
 
