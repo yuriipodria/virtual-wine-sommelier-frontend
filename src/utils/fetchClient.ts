@@ -1,15 +1,17 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const BASE_URL =
-  'http://ec2-16-170-249-41.eu-north-1.compute.amazonaws.com/api';
+  'https://ec2-16-170-249-41.eu-north-1.compute.amazonaws.com/api';
 
 type RequestMethod = 'GET' | 'POST' | 'PATCH' | 'DELETE';
 
-function request<T>(
+async function request<T>(
   url: string,
   method: RequestMethod = 'GET',
   data: any = null,
 ): Promise<T> {
-  const options: RequestInit = { method };
+  const options: RequestInit = {
+    method,
+  };
 
   if (data) {
     options.body = JSON.stringify(data);

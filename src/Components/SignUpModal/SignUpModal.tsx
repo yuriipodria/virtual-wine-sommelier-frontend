@@ -3,27 +3,11 @@ import { Button, Columns, Form, Modal } from 'react-bulma-components';
 import { registerUser } from '../../api/users';
 import { RegisterData } from '../../types/RegisterData';
 import styles from './SignUpModal.module.scss';
+import { validateEmail } from '../../utils/validateEmail';
 
 interface Props {
   isShown: boolean;
   setIsShown: (value: boolean) => void;
-}
-
-interface Errors {
-  firstNameRequired: string;
-  lastNameRequired: string;
-  emailRequired: string;
-  emailFormedIncorrectly: string;
-  passwordRequired: string;
-  passwordLength: string;
-  passwordFormedIncorrectly: string;
-  repeatPasswordRequired: string;
-  passwordsDontMatch: string;
-  streetRequired: string;
-  cityRequired: string;
-  areaRequired: string;
-  zipCodeRequired: string;
-  zipCodeLength: string;
 }
 
 export const SignUpModal: React.FC<Props> = ({ isShown, setIsShown }) => {
@@ -41,7 +25,7 @@ export const SignUpModal: React.FC<Props> = ({ isShown, setIsShown }) => {
     },
   });
 
-  const [errors, setErrors] = useState<Errors>({
+  const [errors, setErrors] = useState({
     firstNameRequired: '',
     lastNameRequired: '',
     emailRequired: '',
@@ -59,13 +43,6 @@ export const SignUpModal: React.FC<Props> = ({ isShown, setIsShown }) => {
   });
 
   const [isLoading, setIsLoading] = useState(false);
-
-  const validateEmail = useCallback((email: string) => {
-    return !!email.toLowerCase().match(
-      // eslint-disable-next-line max-len
-      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-    );
-  }, []);
 
   const validatePassword = useCallback((password: string) => {
     return !!password.match(
@@ -186,70 +163,70 @@ export const SignUpModal: React.FC<Props> = ({ isShown, setIsShown }) => {
         },
       }));
 
-      setErrors(currentErrors => ({ ...currentErrors, zipCodeRequired: '' }));
+      setErrors(currentErrors => ({
+        ...currentErrors,
+        zipCodeRequired: '',
+        zipCodeLength: '',
+      }));
     },
     [],
   );
 
   const handleSubmit = useCallback(
-    async (
-      e: React.FormEvent<HTMLFormElement>,
-      newUserData: RegisterData,
-      inputErrors: Errors,
-    ) => {
+    async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
 
-      const newErrors = { ...inputErrors };
+      const newErrors = { ...errors };
 
-      if (!newUserData.firstName) {
+      if (!userData.firstName) {
         newErrors.firstNameRequired = 'First name is required';
       }
 
-      if (!newUserData.lastName) {
+      if (!userData.lastName) {
         newErrors.lastNameRequired = 'Last name is required';
       }
 
-      if (!newUserData.email) {
+      if (!userData.email) {
         newErrors.emailRequired = 'Email is required';
-      } else if (!validateEmail(newUserData.email)) {
+      } else if (!validateEmail(userData.email)) {
         newErrors.emailFormedIncorrectly = 'Please enter a valid email address';
       }
 
-      if (!newUserData.password) {
+      if (!userData.password) {
         newErrors.passwordRequired = 'Password is required';
       } else if (
-        newUserData.password.length < 8 ||
-        newUserData.password.length > 35
+        userData.password.length < 8 ||
+        userData.password.length > 35
       ) {
         newErrors.passwordLength =
           'Password should be between 8 and 35 characters';
-      } else if (!validatePassword(newUserData.password)) {
+      } else if (!validatePassword(userData.password)) {
         newErrors.passwordFormedIncorrectly =
           'Password must contain at least one digit, one lowercase letter, ' +
           'one uppercase letter and one special character (@#$%^&+=!-)';
       }
 
-      if (!newUserData.repeatPassword) {
+      if (!userData.repeatPassword) {
         newErrors.repeatPasswordRequired = 'Repeat password required';
-      } else if (newUserData.password !== newUserData.repeatPassword) {
+      } else if (userData.password !== userData.repeatPassword) {
         newErrors.passwordsDontMatch = 'Passwords do not match';
       }
 
-      if (!newUserData.shippingAddress.street) {
+      if (!userData.shippingAddress.street) {
         newErrors.streetRequired = 'Street is required';
       }
 
-      if (!newUserData.shippingAddress.city) {
+      if (!userData.shippingAddress.city) {
         newErrors.cityRequired = 'City is required';
       }
 
-      if (!newUserData.shippingAddress.zipCode) {
+      if (!userData.shippingAddress.zipCode) {
         newErrors.zipCodeRequired = 'ZIP code is required';
-      } else if (newUserData.shippingAddress.zipCode.length !== 5) {
+      } else if (userData.shippingAddress.zipCode.length !== 5) {
         newErrors.zipCodeLength = 'ZIP code must consist of 5 characters';
       }
 
-      if (!newUserData.shippingAddress.area) {
+      if (!userData.shippingAddress.area) {
         newErrors.areaRequired = 'Area is required';
       }
 
@@ -261,15 +238,14 @@ export const SignUpModal: React.FC<Props> = ({ isShown, setIsShown }) => {
 
       try {
         setIsLoading(true);
-        await registerUser(newUserData);
+        await registerUser(userData);
       } catch (error) {
-        // eslint-disable-next-line no-console
-        console.log(error);
+        throw error;
       } finally {
         setIsLoading(false);
       }
     },
-    [validateEmail, validatePassword],
+    [errors, userData, validatePassword],
   );
 
   return (
@@ -279,7 +255,7 @@ export const SignUpModal: React.FC<Props> = ({ isShown, setIsShown }) => {
           <Modal.Card.Title>Sign Up</Modal.Card.Title>
         </Modal.Card.Header>
 
-        <form onSubmit={e => handleSubmit(e, userData, errors)}>
+        <form onSubmit={handleSubmit}>
           <Modal.Card.Body>
             <Columns>
               <Columns.Column size="half">

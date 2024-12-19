@@ -62,7 +62,12 @@ export const Header = () => {
               <p className={styles.icon_p}>Catalog</p>
             </Navbar.Item>
 
-            <Navbar.Item className={styles.navbar_item} onClick={hideMenu}>
+            <Navbar.Item
+              className={styles.navbar_item}
+              renderAs={Link}
+              to="/cart/1"
+              onClick={hideMenu}
+            >
               <FontAwesomeIcon icon={faShoppingCart} />
               <p className={styles.icon_p}>Cart</p>
             </Navbar.Item>

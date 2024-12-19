@@ -16,13 +16,13 @@
   cursor: pointer;
 
   &:hover + .label::before {
-    background-color: var(--bulma-primary-dark-invert);
+    background-color: var(--bulma-primary);
   }
 
   &:checked + .label::before {
     content: '\002714';
     color: #fff;
-    background-color: var(--bulma-primary-light-invert);
+    background-color: var(--bulma-primary);
   }
 }
 
@@ -32,7 +32,7 @@
   cursor: pointer;
 
   &:hover::before {
-    background-color: var(--bulma-primary-dark-invert);
+    background-color: var(--bulma-primary);
   }
 
   &::before {
