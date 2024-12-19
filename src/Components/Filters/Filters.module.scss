@@ -1,0 +1,81 @@
+@use 'bulma/sass/utilities/mixins';
+@use '../../variables.scss' as *;
+
+$filters-bg-color: #f7f7f7;
+$field-bg-color: #f0f0f0;
+$filters-field-border-color: #dadada;
+
+.block {
+  background-color: $filters-bg-color;
+  border: $filters-field-border-color 1px solid;
+  padding-block: $bulma-spacing-2;
+  padding-inline: $bulma-spacing-3;
+  margin: $bulma-spacing-4;
+  border-radius: 8px;
+
+  @include mixins.tablet {
+    min-width: max-content;
+    background-color: $filters-bg-color;
+    border-radius: 0;
+    border: none;
+    margin: 0;
+    position: sticky;
+    height: calc(100vh - $header-height);
+    top: $header-height;
+    overflow-y: scroll;
+    position: sticky;
+  }
+
+  @include mixins.desktop {
+    padding-block: $bulma-spacing-4;
+    padding-inline: $bulma-spacing-6;
+  }
+}
+
+.form {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  flex-wrap: wrap;
+  flex-basis: content;
+
+  @include mixins.tablet {
+    align-items: start;
+    flex-direction: column;
+    gap: 0;
+  }
+}
+
+.field {
+  color: var(--bulma-black);
+  background-color: $field-bg-color;
+  padding: $bulma-spacing-2;
+  border-radius: 6px;
+  border: $filters-field-border-color 1px solid;
+
+  @include mixins.tablet {
+    background-color: unset;
+    border: none;
+    border-radius: 0;
+    padding: 0;
+  }
+}
+
+.heading {
+  color: var(--bulma-black);
+}
+
+.price_form_field {
+  width: 120px;
+}
+
+.button_group {
+  display: flex;
+  flex-direction: column;
+
+  @include mixins.tablet {
+    flex-direction: row;
+  }
+}

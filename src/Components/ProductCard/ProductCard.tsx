@@ -3,8 +3,11 @@ import styles from './ProductCard.module.scss';
 import { Link } from 'react-router-dom';
 import { Tag } from '../Tag';
 import React from 'react';
+import { Product } from '../../types/Product';
 
-export const ProductCard: React.FC<{ product: string }> = ({ product }) => {
+export const ProductCard: React.FC<{ product: Product }> = ({
+  product: { name, country, color, type, strength, grape, price },
+}) => {
   return (
     <Columns.Column
       mobile={{ size: 'one-third' }}
@@ -21,22 +24,23 @@ export const ProductCard: React.FC<{ product: string }> = ({ product }) => {
         />
 
         <Card.Header renderAs={Link} to="/product/1">
-          <Card.Header.Title>Lorem, ipsum.</Card.Header.Title>
+          <Card.Header.Title>{name}</Card.Header.Title>
         </Card.Header>
 
         <Card.Content p={4}>
           <Content className={styles.content}>
-            <Tag text={product} />
-            <Tag text="aaa" />
-            <Tag text="aaa" />
-            <Tag text="aaa" />
-            <Tag text="aaaaaaaaaaa" />
-            <Tag text="asdafgdh" />
+            <Tag text={country} />
+            <Tag text={color} />
+            <Tag text={type} />
+            <Tag text={strength} />
+            <Tag text={grape} />
           </Content>
         </Card.Content>
 
         <Card.Footer>
-          <Card.Footer.Item>Price: 49.99$</Card.Footer.Item>
+          <Card.Footer.Item>
+            Ціна:&nbsp;<span className={styles.price}>{price} грн</span>
+          </Card.Footer.Item>
         </Card.Footer>
       </Card>
     </Columns.Column>

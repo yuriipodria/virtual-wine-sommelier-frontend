@@ -3,11 +3,13 @@ import { ProductsList } from '../ProductsList';
 import styles from './Catalog.module.scss';
 import { faFilter } from '@fortawesome/free-solid-svg-icons';
 import { useCallback, useEffect, useState } from 'react';
-import { Sidebar } from '../Sidebar';
-import { Block, Button, Pagination } from 'react-bulma-components';
+import { Filters } from '../Filters';
+import { Block, Button, Loader, Pagination } from 'react-bulma-components';
 import { useSearchParams } from 'react-router-dom';
 import { SearchParams } from '../../types/SearchParams';
 import { getSearchWith } from '../../utils/getSearchWith';
+import { getProductsByPageSize } from '../../api/products';
+import { Product } from '../../types/Product';
 
 export const Catalog = () => {
   const BULMA_MOBILE_TABLET_BREAKPOINT = 768;
@@ -29,6 +31,9 @@ export const Catalog = () => {
   const [areFiltersShown, setAreFiltersShown] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const currentPage = +(searchParams.get('page') || 1);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [areProductsLoading, setAreProductsLoading] = useState(true);
+  const totalPages = 100;
 
   const setSearchWith = useCallback(
     (params: SearchParams) => {
@@ -39,21 +44,6 @@ export const Catalog = () => {
     [searchParams, setSearchParams],
   );
 
-  const productsFromServer = [
-    0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
-    21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39,
-    40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58,
-  ];
-
-  const preparedProducts = [...productsFromServer];
-
-  const productsToDisplay = productsFromServer.slice(
-    (currentPage - 1) * perPage,
-    currentPage * perPage,
-  );
-
-  const totalPages = Math.ceil(preparedProducts.length / perPage);
-
   const onPageChange = useCallback(
     (page: number) => {
       setSearchWith({ page });
@@ -62,6 +52,18 @@ export const Catalog = () => {
     },
     [setSearchWith],
   );
+
+  useEffect(() => {
+    setAreProductsLoading(true);
+    getProductsByPageSize(currentPage - 1, perPage)
+      .then(setProducts)
+      .catch(error => {
+        throw error;
+      })
+      .finally(() => {
+        setAreProductsLoading(false);
+      });
+  }, [currentPage, perPage]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -90,11 +92,15 @@ export const Catalog = () => {
       )}
 
       {(windowWidth > BULMA_MOBILE_TABLET_BREAKPOINT || areFiltersShown) && (
-        <Sidebar />
+        <Filters />
       )}
 
       <Block className={styles.block}>
-        <ProductsList toDisplay={productsToDisplay} />
+        {areProductsLoading ? (
+          <Loader p={4} m={6} />
+        ) : (
+          <ProductsList toDisplay={products} />
+        )}
 
         <Pagination
           total={totalPages}
