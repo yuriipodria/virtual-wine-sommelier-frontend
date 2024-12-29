@@ -1,9 +1,10 @@
 import { ChangeEvent, useCallback, useState } from 'react';
 import { Button, Columns, Form, Modal } from 'react-bulma-components';
-import { registerUser } from '../../api/users';
+import { registerUser } from '../../api/auth';
 import { RegisterData } from '../../types/RegisterData';
 import styles from './SignUpModal.module.scss';
 import { validateEmail } from '../../utils/validateEmail';
+import { useNotification } from '../NotificationContext';
 
 interface Props {
   isShown: boolean;
@@ -43,6 +44,8 @@ export const SignUpModal: React.FC<Props> = ({ isShown, setIsShown }) => {
   });
 
   const [isLoading, setIsLoading] = useState(false);
+
+  const { showNotification } = useNotification();
 
   const validatePassword = useCallback((password: string) => {
     return !!password.match(
@@ -239,13 +242,17 @@ export const SignUpModal: React.FC<Props> = ({ isShown, setIsShown }) => {
       try {
         setIsLoading(true);
         await registerUser(userData);
+
+        showNotification('successNotif', 'You successfully logged in');
+        setIsShown(false);
       } catch (error) {
+        showNotification('warningNotif', 'Something went wrong');
         throw error;
       } finally {
         setIsLoading(false);
       }
     },
-    [errors, userData, validatePassword],
+    [errors, userData, validatePassword, showNotification, setIsShown],
   );
 
   return (

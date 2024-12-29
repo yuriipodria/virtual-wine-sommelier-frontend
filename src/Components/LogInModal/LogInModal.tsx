@@ -1,8 +1,9 @@
 import React, { ChangeEvent, useCallback, useState } from 'react';
 import { Button, Form, Modal } from 'react-bulma-components';
 import { validateEmail } from '../../utils/validateEmail';
-import { loginUser } from '../../api/users';
+import { loginUser } from '../../api/auth';
 import { setAuthToken } from '../../utils/authTokenCookie';
+import { useNotification } from '../NotificationContext';
 
 interface Props {
   isShown: boolean;
@@ -13,6 +14,7 @@ export const LogInModal: React.FC<Props> = ({ isShown, setIsShown }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const { showNotification } = useNotification();
 
   const [errors, setErrors] = useState({
     emailRequired: '',
@@ -77,17 +79,17 @@ export const LogInModal: React.FC<Props> = ({ isShown, setIsShown }) => {
         setIsLoading(true);
         const { token } = await loginUser({ email, password });
 
-        // eslint-disable-next-line no-console
-        console.log(token);
-
         setAuthToken(token);
+        showNotification('successNotif', 'You successfully logged in');
+        setIsShown(false);
       } catch (error) {
+        showNotification('warningNotif', 'Wrong email or password');
         throw error;
       } finally {
         setIsLoading(false);
       }
     },
-    [errors, email, password],
+    [errors, email, password, showNotification, setIsShown],
   );
 
   return (

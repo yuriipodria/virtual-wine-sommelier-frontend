@@ -6,6 +6,7 @@ import { Homepage } from './Components/Homepage';
 import { Catalog } from './Components/Catalog';
 import { ProductPage } from './Components/ProductPage';
 import { RequireAuth } from './Components/RequireAuth';
+import { NotifProvider } from './Components/NotificationContext';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,
@@ -13,20 +14,19 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <React.StrictMode>
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<App />}>
-          <Route index element={<Homepage />} />
-
-          <Route path="catalog" element={<Catalog />} />
-
-          <Route path="product/:id" element={<ProductPage />} />
-
-          <Route path="/cart/:id" element={<RequireAuth />}>
-            <Route index element={<Catalog />} />
+    <NotifProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<App />}>
+            <Route index element={<Homepage />} />
+            <Route path="catalog" element={<Catalog />} />
+            <Route path="product/:id" element={<ProductPage />} />
+            <Route path="/cart/:id" element={<RequireAuth />}>
+              <Route index element={<Catalog />} />
+            </Route>
           </Route>
-        </Route>
-      </Routes>
-    </BrowserRouter>
+        </Routes>
+      </BrowserRouter>
+    </NotifProvider>
   </React.StrictMode>,
 );
