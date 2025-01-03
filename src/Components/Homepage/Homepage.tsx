@@ -4,8 +4,12 @@ import headerStyles from '../Header/Header.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { useEffect } from 'react';
+import { Color, Country, Grape, Strength, Type } from '../../types/Product';
 
 export const Homepage = () => {
+  const MIN_PRICE = 0;
+  const MAX_PRICE = 2000;
+
   useEffect(() => {
     document.body.classList.add(homepageStyles.body);
 
@@ -29,20 +33,16 @@ export const Homepage = () => {
           <Columns.Column size={12} desktop={{ size: 'half' }}>
             <Form.Field>
               <Box className={homepageStyles.box}>
-                <Form.Label htmlFor="mood-select">
-                  What is your mood? 🎉
-                </Form.Label>
+                <Form.Label htmlFor="country-select">Яка країна? 🌎</Form.Label>
 
                 <Form.Control>
-                  <Form.Select id="mood-select">
-                    <option value="">
-                      Don&apos;t know yet / Anything will do
-                    </option>
-                    <option value="celebratory">Celebratory</option>
-                    <option value="adventurous">Adventurous</option>
-                    <option value="indulgent">Indulgent</option>
-                    <option value="nostalgic">Nostalgic</option>
-                    <option value="romantic">Romantic</option>
+                  <Form.Select id="country-select">
+                    <option value="">Поки не знаю / будь-що підійде</option>
+                    {Object.entries(Country).map(([key, value]) => (
+                      <option key={key} value={key}>
+                        {value}
+                      </option>
+                    ))}
                   </Form.Select>
                 </Form.Control>
               </Box>
@@ -52,44 +52,16 @@ export const Homepage = () => {
           <Columns.Column size={12} desktop={{ size: 'half' }}>
             <Form.Field>
               <Box className={homepageStyles.box}>
-                <Form.Label htmlFor="purpose-select">
-                  What you gonna do with the wine? 🎯
-                </Form.Label>
-
-                <Form.Control>
-                  <Form.Select id="purpose-select">
-                    <option value="">
-                      Don&apos;t know yet / Anything will do
-                    </option>
-                    <option value="gift">It&apos;s a gift</option>
-                    <option value="complement">Complement for food</option>
-                    <option value="cooking">Cooking ingredient</option>
-                    <option value="socialization">
-                      We need a catalyst to get the conversation going
-                    </option>
-                    <option value="curiosity">
-                      I want to try something entirely new
-                    </option>
-                  </Form.Select>
-                </Form.Control>
-              </Box>
-            </Form.Field>
-          </Columns.Column>
-
-          <Columns.Column size={12} desktop={{ size: 'one-third' }}>
-            <Form.Field>
-              <Box className={homepageStyles.box}>
-                <Form.Label htmlFor="color-select">
-                  What about the color? 🌸
-                </Form.Label>
+                <Form.Label htmlFor="color-select">Який колір? 🌸</Form.Label>
 
                 <Form.Control>
                   <Form.Select id="color-select">
-                    <option value="">
-                      Don&apos;t know yet / Anything will do
-                    </option>
-                    <option value="red">Red</option>
-                    <option value="white">White</option>
+                    <option value="">Поки не знаю / будь-що підійде</option>
+                    {Object.entries(Color).map(([key, value]) => (
+                      <option key={key} value={key}>
+                        {value}
+                      </option>
+                    ))}
                   </Form.Select>
                 </Form.Control>
               </Box>
@@ -99,47 +71,58 @@ export const Homepage = () => {
           <Columns.Column size={12} desktop={{ size: 'one-third' }}>
             <Form.Field>
               <Box className={homepageStyles.box}>
-                <Form.Label htmlFor="country-select">
-                  What country? 🌎
-                </Form.Label>
-
-                <Form.Control>
-                  <Form.Select id="country-select">
-                    <option value="">
-                      Don&apos;t know yet / Anything will do
-                    </option>
-                    <option value="france">France</option>
-                    <option value="italy">Italy</option>
-                    <option value="spain">Spain</option>
-                    <option value="ukraine">Ukraine</option>
-                    <option value="us">United States</option>
-                    <option value="australia">Australia</option>
-                    <option value="argentina">Argentina</option>
-                    <option value="chile">Chile</option>
-                    <option value="germany">Germany</option>
-                    <option value="southAfrica">South Africa</option>
-                  </Form.Select>
-                </Form.Control>
-              </Box>
-            </Form.Field>
-          </Columns.Column>
-
-          <Columns.Column size={12} desktop={{ size: 'one-third' }}>
-            <Form.Field>
-              <Box className={homepageStyles.box}>
-                <Form.Label htmlFor="type-select">
-                  Which type do you choose? 🥂
-                </Form.Label>
+                <Form.Label htmlFor="type-select">Як щодо типу? 🥂</Form.Label>
 
                 <Form.Control>
                   <Form.Select id="type-select">
-                    <option value="">
-                      Don&apos;t know yet / Anything will do
-                    </option>
-                    <option value="dry">Dry</option>
-                    <option value="semiDry">Semi-dry</option>
-                    <option value="semiSweet">Semi-sweet</option>
-                    <option value="sweet">Sweet</option>
+                    <option value="">Поки не знаю / будь-що підійде</option>
+                    {Object.entries(Type).map(([key, value]) => (
+                      <option key={key} value={key}>
+                        {value}
+                      </option>
+                    ))}
+                  </Form.Select>
+                </Form.Control>
+              </Box>
+            </Form.Field>
+          </Columns.Column>
+
+          <Columns.Column size={12} desktop={{ size: 'one-third' }}>
+            <Form.Field>
+              <Box className={homepageStyles.box}>
+                <Form.Label htmlFor="strength-select">
+                  Яка міцність? 🍷
+                </Form.Label>
+
+                <Form.Control>
+                  <Form.Select id="strength-select">
+                    <option value="">Поки не знаю / будь-що підійде</option>
+                    {Object.entries(Strength).map(([key, value]) => (
+                      <option key={key} value={key}>
+                        {value}
+                      </option>
+                    ))}
+                  </Form.Select>
+                </Form.Control>
+              </Box>
+            </Form.Field>
+          </Columns.Column>
+
+          <Columns.Column size={12} desktop={{ size: 'one-third' }}>
+            <Form.Field>
+              <Box className={homepageStyles.box}>
+                <Form.Label htmlFor="grape-select">
+                  Яким сортам винограду надаєш перевагу? 🍇
+                </Form.Label>
+
+                <Form.Control>
+                  <Form.Select id="strength-select">
+                    <option value="">Поки не знаю / будь-що підійде</option>
+                    {Object.entries(Grape).map(([key, value]) => (
+                      <option key={key} value={key}>
+                        {value}
+                      </option>
+                    ))}
                   </Form.Select>
                 </Form.Control>
               </Box>
@@ -150,14 +133,29 @@ export const Homepage = () => {
             <Form.Field>
               <Box className={homepageStyles.box}>
                 <Form.Label htmlFor="price-input">
-                  What is your budget? 💸
+                  Який твій бюджет (грн)? 💸
                 </Form.Label>
 
                 <Form.Control className={homepageStyles.price_form_control}>
-                  <p>From</p>
-                  <Form.Input id="price-input" />
-                  <p>To</p>
-                  <Form.Input />
+                  <p>Від</p>
+
+                  <input
+                    className={homepageStyles.range_slider}
+                    type="range"
+                    min={MIN_PRICE}
+                    max={MAX_PRICE}
+                    step="1"
+                  />
+
+                  <p>До</p>
+
+                  <input
+                    className={homepageStyles.range_slider}
+                    type="range"
+                    min={MIN_PRICE}
+                    max={MAX_PRICE}
+                    step="1"
+                  />
                 </Form.Control>
               </Box>
             </Form.Field>
@@ -175,7 +173,7 @@ export const Homepage = () => {
                   textSize={4}
                   className={homepageStyles.button}
                 >
-                  <p>Search</p>
+                  <p>Шукати</p>
                   <FontAwesomeIcon icon={faSearch} />
                 </Button>
               </Form.Control>

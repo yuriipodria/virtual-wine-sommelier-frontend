@@ -4,12 +4,30 @@ import styles from './Catalog.module.scss';
 import { faFilter } from '@fortawesome/free-solid-svg-icons';
 import { useCallback, useEffect, useState } from 'react';
 import { Filters } from '../Filters';
-import { Block, Button, Loader, Pagination } from 'react-bulma-components';
-import { useSearchParams } from 'react-router-dom';
+import {
+  Block,
+  Button,
+  Heading,
+  Loader,
+  Pagination,
+} from 'react-bulma-components';
+import { useParams, useSearchParams } from 'react-router-dom';
 import { SearchParams } from '../../types/SearchParams';
 import { getSearchWith } from '../../utils/getSearchWith';
-import { getProductsByPageSize } from '../../api/products';
-import { Product } from '../../types/Product';
+import { getAllProducts } from '../../api/products';
+import {
+  Color,
+  Country,
+  Grape,
+  Product,
+  Strength,
+  Type,
+} from '../../types/Product';
+import { getCart } from '../../api/cart';
+import { FiltersInterface } from '../../types/FiltersInterface';
+import { filterProducts } from '../../utils/filterProducts';
+import { UserData } from '../../types/UserData';
+import { getUserInfo } from '../../api/users';
 
 export const Catalog = () => {
   const BULMA_MOBILE_TABLET_BREAKPOINT = 768;
@@ -26,14 +44,44 @@ export const Catalog = () => {
     }
   }, []);
 
+  const { id } = useParams();
+  const isCartRoute = !!id;
+  const [userData, setUserData] = useState<UserData | null>(null);
+
   const [perPage, setPerPage] = useState(getPerPage(window.innerWidth));
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [areFiltersShown, setAreFiltersShown] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const currentPage = +(searchParams.get('page') || 1);
-  const [products, setProducts] = useState<Product[]>([]);
+  const [productsFromServer, setProducts] = useState<Product[]>([]);
   const [areProductsLoading, setAreProductsLoading] = useState(true);
-  const totalPages = 100;
+
+  const [selectedFilters, setSelectedFilters] = useState<FiltersInterface>({
+    country: (searchParams.getAll('country') as Country[]) || [],
+    color: (searchParams.getAll('color') as Color[]) || [],
+    type: (searchParams.getAll('type') as Type[]) || [],
+    strength: (searchParams.getAll('strength') as Strength[]) || [],
+    grape: (searchParams.getAll('grape') as Grape[]) || [],
+    price: searchParams.getAll('price').map(val => +val) || [],
+    query: searchParams.get('query') || null,
+  });
+
+  const appliedFilters: FiltersInterface = {
+    country: (searchParams.getAll('country') as Country[]) || [],
+    color: (searchParams.getAll('color') as Color[]) || [],
+    type: (searchParams.getAll('type') as Type[]) || [],
+    strength: (searchParams.getAll('strength') as Strength[]) || [],
+    grape: (searchParams.getAll('grape') as Grape[]) || [],
+    price: searchParams.getAll('price').map(val => +val) || [],
+    query: searchParams.get('query') || null,
+  };
+
+  const preparedProducts = filterProducts(productsFromServer, appliedFilters);
+
+  const totalPages = Math.ceil(preparedProducts.length / perPage);
+  const startIndex = (currentPage - 1) * perPage;
+  const endIndex = startIndex + perPage;
+  const displayedProducts = preparedProducts.slice(startIndex, endIndex);
 
   const setSearchWith = useCallback(
     (params: SearchParams) => {
@@ -54,16 +102,50 @@ export const Catalog = () => {
   );
 
   useEffect(() => {
+    setSelectedFilters({
+      country: (searchParams.getAll('country') as Country[]) || [],
+      color: (searchParams.getAll('color') as Color[]) || [],
+      type: (searchParams.getAll('type') as Type[]) || [],
+      strength: (searchParams.getAll('strength') as Strength[]) || [],
+      grape: (searchParams.getAll('grape') as Grape[]) || [],
+      price: searchParams.getAll('price').map(val => +val) || [],
+      query: searchParams.get('query') || null,
+    });
+  }, [searchParams]);
+
+  useEffect(() => {
     setAreProductsLoading(true);
-    getProductsByPageSize(currentPage - 1, perPage)
-      .then(setProducts)
+
+    if (isCartRoute) {
+      getCart()
+        .then(data => {
+          setProducts(data.cartItems);
+        })
+        .catch(error => {
+          throw error;
+        })
+        .finally(() => setAreProductsLoading(false));
+
+      getUserInfo()
+        .then(setUserData)
+        .catch(error => {
+          throw error;
+        });
+
+      return;
+    }
+
+    getAllProducts()
+      .then(data => {
+        setProducts(data.wineDtos);
+      })
       .catch(error => {
         throw error;
       })
       .finally(() => {
         setAreProductsLoading(false);
       });
-  }, [currentPage, perPage]);
+  }, [isCartRoute]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -92,14 +174,26 @@ export const Catalog = () => {
       )}
 
       {(windowWidth > BULMA_MOBILE_TABLET_BREAKPOINT || areFiltersShown) && (
-        <Filters />
+        <Filters
+          selectedFilters={selectedFilters}
+          setSelectedFilters={setSelectedFilters}
+          setSearchWith={setSearchWith}
+        />
       )}
 
       <Block className={styles.block}>
         {areProductsLoading ? (
           <Loader p={4} m={6} />
         ) : (
-          <ProductsList toDisplay={products} />
+          <>
+            {isCartRoute && (
+              <Heading mb="0" ml={6} mt={5} className={styles.cart_heading}>
+                {`${userData?.firstName} ${userData?.lastName}'s cart`}
+              </Heading>
+            )}
+
+            <ProductsList toDisplay={displayedProducts} />
+          </>
         )}
 
         <Pagination

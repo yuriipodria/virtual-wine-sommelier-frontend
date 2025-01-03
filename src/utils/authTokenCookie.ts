@@ -10,6 +10,10 @@ export const getAuthToken = () => {
   return Cookies.get(AUTH_TOKEN_COOKIE);
 };
 
+export const checkLoggedIn = () => {
+  return !!getAuthToken();
+};
+
 export const removeAuthToken = () => {
   Cookies.remove(AUTH_TOKEN_COOKIE);
 };

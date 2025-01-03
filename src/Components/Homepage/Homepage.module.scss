@@ -1,4 +1,5 @@
 @use 'bulma/sass/utilities/mixins';
+@use 'bulma/sass/utilities/derived-variables' as *;
 
 .body {
   position: relative;
@@ -42,9 +43,12 @@
 }
 
 .price_form_control {
-  display: flex;
-  gap: 12px;
-  align-items: center;
+  width: 100%;
+  text-align: center;
+
+  @include mixins.desktop {
+    width: 50%;
+  }
 }
 
 .button {
@@ -62,4 +66,36 @@
   &:hover {
     transform: scale(1.03);
   }
+}
+
+.range_slider {
+  -webkit-appearance: none;
+  appearance: none;
+  display: block;
+  width: 100%;
+  height: 6px;
+  margin-block: 8px;
+  background: #ddd;
+  border-radius: 3px;
+  outline: none;
+  transition: all 0.3s;
+}
+
+.range_slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  background: var(--bulma-primary);
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
+  transition: all 0.3s;
+}
+
+.range_slider:hover {
+  background: #ccc;
+}
+
+.range_slider::-webkit-slider-thumb:hover {
+  background: var(--bulma-primary-40);
 }

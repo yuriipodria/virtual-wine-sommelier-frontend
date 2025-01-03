@@ -6,7 +6,7 @@ import React from 'react';
 import { Product } from '../../types/Product';
 
 export const ProductCard: React.FC<{ product: Product }> = ({
-  product: { name, country, color, type, strength, grape, price },
+  product: { name, country, color, type, strength, grape, price, id },
 }) => {
   return (
     <Columns.Column
@@ -18,7 +18,7 @@ export const ProductCard: React.FC<{ product: Product }> = ({
       <Card>
         <Card.Image
           renderAs={Link}
-          to="/product/1"
+          to={`/product/${id}`}
           size="4by3"
           src="https://placehold.co/600x400"
         />

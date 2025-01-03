@@ -1,63 +1,64 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { faCartPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  Block,
-  Button,
-  Columns,
-  Container,
-  Heading,
-  Image,
-} from 'react-bulma-components';
+import { Block, Button, Heading, Image, Loader } from 'react-bulma-components';
 import { Tag } from '../Tag';
 import styles from './ProductPage.module.scss';
+import { useEffect, useState } from 'react';
+import { Product } from '../../types/Product';
+import { getProductById } from '../../api/products';
+import { useParams } from 'react-router-dom';
 
 export const ProductPage = () => {
+  const id = +(useParams().id || 1);
+  const [product, setProduct] = useState<Product | null>(null);
+
+  useEffect(() => {
+    getProductById(id)
+      .then(setProduct)
+      .catch(error => {
+        throw error;
+      });
+  }, [id]);
+
+  if (!product) {
+    return <Loader p={4} m={6} />;
+  }
+
+  const { name, price, country, color, type, strength, grape, description } =
+    product;
+
   return (
     <Block className={styles.outer_block}>
-      <Heading size={2}>Lorem, ipsum.</Heading>
+      <Heading size={2}>{name}</Heading>
 
       <Block className={styles.image_block} mb={6}>
         <Image className={styles.image} src="https://placehold.co/600x400" />
 
         <Block className={styles.price_tags_block}>
-          <Block textSize={3} textWeight="bold">
-            Price: $49.99
+          <Block textSize={3}>
+            Ціна:&nbsp;<span className={styles.price}>{price} грн</span>
           </Block>
 
           <Block className={styles.tags_block}>
-            <Tag text="aaaaaaaaa" />
-            <Tag text="aaaaaaaaa" />
-            <Tag text="asaf" />
-            <Tag text="asaf" />
-            <Tag text="asaf" />
-            <Tag text="aaaaaaaaa" />
-            <Tag text="aaaaaaaaa" />
-            <Tag text="aaaaaaaaa" />
-            <Tag text="aaaaaaaaa" />
+            <Tag text={country} />
+            <Tag text={color} />
+            <Tag text={type} />
+            <Tag text={strength} />
+            <Tag text={grape} />
           </Block>
         </Block>
       </Block>
 
       <Block>
         <Heading textSize={4} textWeight="bold" subtitle mb={2}>
-          Description:
+          Опис:
         </Heading>
 
-        <Block textSize={5}>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis
-          laborum veritatis incidunt doloribus dicta vel labore. Sapiente
-          tempore suscipit non, doloribus veniam delectus error nostrum officiis
-          natus qui aut unde vitae minima illo, commodi voluptas blanditiis
-          facilis itaque esse. Illum distinctio, nihil ratione excepturi sint
-          cumque accusamus nulla tenetur eum, modi animi deleniti rem quae dolor
-          ab minus ducimus earum? Incidunt ab consequatur quaerat quidem debitis
-          cum eos accusantium veritatis?
-        </Block>
+        <Block textSize={5}>{description}</Block>
       </Block>
 
       <Button className={styles.button} textWeight="semibold" textSize={5}>
-        Add to cart
+        Додати до кошика
         <FontAwesomeIcon className={styles.icon} icon={faCartPlus} />
       </Button>
     </Block>

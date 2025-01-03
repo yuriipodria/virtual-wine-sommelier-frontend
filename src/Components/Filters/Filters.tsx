@@ -1,121 +1,234 @@
 import { Block, Button, Form, Heading } from 'react-bulma-components';
 import { Checkbox } from '../Checkbox';
 import styles from './Filters.module.scss';
+import { Color, Country, Grape, Strength, Type } from '../../types/Product';
+import { FiltersInterface } from '../../types/FiltersInterface';
+import { SearchParams } from '../../types/SearchParams';
 
-export const Filters = () => (
-  <Block className={styles.block} mb="0">
-    <aside>
-      <form className={styles.form}>
-        <Form.Field className={styles.field} mb={5}>
-          <Form.Label>
-            <Heading size={5} className={styles.heading}>
-              Mood
-            </Heading>
-          </Form.Label>
+interface Props {
+  selectedFilters: FiltersInterface;
+  setSelectedFilters: (
+    current: (value: FiltersInterface) => FiltersInterface,
+  ) => void;
+  setSearchWith: (params: SearchParams) => void;
+}
 
-          <Form.Control>
-            <Checkbox labelText="Celebratory" id="celebratory-checkbox" />
-            <Checkbox labelText="Adventurous" id="adventurous-checkbox" />
-            <Checkbox labelText="Indulgent" id="indulgent-checkbox" />
-            <Checkbox labelText="Nostalgic" id="nostalgic-checkbox" />
-            <Checkbox labelText="Romantic" id="romantic-checkbox" />
-          </Form.Control>
-        </Form.Field>
+export const Filters: React.FC<Props> = ({
+  selectedFilters,
+  setSelectedFilters,
+  setSearchWith,
+}) => {
+  const handleApply = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.preventDefault();
+    setSearchWith({ ...selectedFilters, page: null });
+    window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+  };
 
-        <Form.Field className={styles.field} mb={5}>
-          <Form.Label>
-            <Heading size={5} className={styles.heading}>
-              Purpose
-            </Heading>
-          </Form.Label>
+  const handleReset = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.preventDefault();
+    setSearchWith({
+      country: [],
+      color: [],
+      type: [],
+      strength: [],
+      grape: [],
+      price: [],
+      query: null,
+    });
+    window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+  };
 
-          <Form.Control>
-            <Checkbox labelText="Gift" id="gift-checkbox" />
-            <Checkbox labelText="Complement" id="complement-checkbox" />
-            <Checkbox labelText="Cooking" id="cooking-checkbox" />
-            <Checkbox labelText="Socialization" id="socialization-checkbox" />
-            <Checkbox labelText="Curiosity" id="curiousity-checkbox" />
-          </Form.Control>
-        </Form.Field>
+  return (
+    <Block className={styles.block} mb="0">
+      <aside>
+        <form className={styles.form}>
+          <Form.Field className={styles.field} mb={5}>
+            <Form.Label>
+              <Heading size={5} className={styles.heading}>
+                Країна
+              </Heading>
+            </Form.Label>
 
-        <Form.Field className={styles.field} mb={5}>
-          <Form.Label>
-            <Heading size={5} className={styles.heading}>
-              Color
-            </Heading>
-          </Form.Label>
+            <Form.Control>
+              {Object.entries(Country).map(([key, value]) => {
+                const isChecked = selectedFilters.country.includes(value);
 
-          <Form.Control>
-            <Checkbox labelText="Red" id="red-checkbox" />
-            <Checkbox labelText="White" id="white-checkbox" />
-          </Form.Control>
-        </Form.Field>
+                return (
+                  <Checkbox
+                    key={key}
+                    labelText={value}
+                    id={`${key}-checkbox`}
+                    checked={isChecked}
+                    onChange={() => {
+                      setSelectedFilters(current => ({
+                        ...current,
+                        country: isChecked
+                          ? current.country.filter(country => country !== value)
+                          : [...current.country, value],
+                      }));
+                    }}
+                  />
+                );
+              })}
+            </Form.Control>
+          </Form.Field>
 
-        <Form.Field className={styles.field} mb={5}>
-          <Form.Label>
-            <Heading size={5} className={styles.heading}>
-              Country
-            </Heading>
-          </Form.Label>
+          <Form.Field className={styles.field} mb={5}>
+            <Form.Label>
+              <Heading size={5} className={styles.heading}>
+                Колір
+              </Heading>
+            </Form.Label>
 
-          <Form.Control>
-            <Checkbox labelText="France" id="france-checkbox" />
-            <Checkbox labelText="Italy" id="italy-checkbox" />
-            <Checkbox labelText="Spain" id="spain-checkbox" />
-            <Checkbox labelText="Ukraine" id="ukraine-checkbox" />
-            <Checkbox labelText="United States" id="us-checkbox" />
-            <Checkbox labelText="Australia" id="australia-checkbox" />
-            <Checkbox labelText="Argentina" id="argentina-checkbox" />
-            <Checkbox labelText="Chile" id="chile-checkbox" />
-            <Checkbox labelText="Germany" id="germany-checkbox" />
-            <Checkbox labelText="South Africa" id="sa-checkbox" />
-          </Form.Control>
-        </Form.Field>
+            <Form.Control>
+              {Object.entries(Color).map(([key, value]) => {
+                const isChecked = selectedFilters.color.includes(value);
 
-        <Form.Field className={styles.field} mb={5}>
-          <Form.Label>
-            <Heading size={5} className={styles.heading}>
-              Type
-            </Heading>
-          </Form.Label>
+                return (
+                  <Checkbox
+                    key={key}
+                    labelText={value}
+                    id={`${key}-checkbox`}
+                    checked={isChecked}
+                    onChange={() =>
+                      setSelectedFilters(current => ({
+                        ...current,
+                        color: isChecked
+                          ? current.color.filter(color => color !== value)
+                          : [...current.color, value],
+                      }))
+                    }
+                  />
+                );
+              })}
+            </Form.Control>
+          </Form.Field>
 
-          <Form.Control>
-            <Checkbox labelText="Dry" id="dry-checkbox" />
-            <Checkbox labelText="Semi-dry" id="sdry-checkbox" />
-            <Checkbox labelText="Semi-sweet" id="ssweet-checkbox" />
-            <Checkbox labelText="Sweet" id="sweet-checkbox" />
-          </Form.Control>
-        </Form.Field>
+          <Form.Field className={styles.field} mb={5}>
+            <Form.Label>
+              <Heading size={5} className={styles.heading}>
+                Тип
+              </Heading>
+            </Form.Label>
 
-        <Form.Field
-          className={`${styles.field} ${styles.price_form_field}`}
-          mb={5}
-        >
-          <Form.Label>
-            <Heading size={5} className={styles.heading}>
-              Price
-            </Heading>
-          </Form.Label>
+            <Form.Control>
+              {Object.entries(Type).map(([key, value]) => {
+                const isChecked = selectedFilters.type.includes(value);
 
-          <Form.Control>
-            <p>From</p>
-            <Form.Input />
-            <p>To</p>
-            <Form.Input />
-          </Form.Control>
-        </Form.Field>
+                return (
+                  <Checkbox
+                    key={key}
+                    labelText={value}
+                    id={`${key}-checkbox`}
+                    checked={isChecked}
+                    onChange={() =>
+                      setSelectedFilters(current => ({
+                        ...current,
+                        type: isChecked
+                          ? current.type.filter(type => type !== value)
+                          : [...current.type, value],
+                      }))
+                    }
+                  />
+                );
+              })}
+            </Form.Control>
+          </Form.Field>
 
-        <Form.Field>
-          <Form.Control
-            className={styles.button_group}
-            renderAs={Button.Group}
-            textAlign="center"
+          <Form.Field className={styles.field} mb={5}>
+            <Form.Label>
+              <Heading size={5} className={styles.heading}>
+                Міцність
+              </Heading>
+            </Form.Label>
+
+            <Form.Control>
+              {Object.entries(Strength).map(([key, value]) => {
+                const isChecked = selectedFilters.strength.includes(value);
+
+                return (
+                  <Checkbox
+                    key={key}
+                    labelText={value}
+                    id={`${key}-checkbox`}
+                    checked={isChecked}
+                    onChange={() =>
+                      setSelectedFilters(current => ({
+                        ...current,
+                        strength: isChecked
+                          ? current.strength.filter(str => str !== value)
+                          : [...current.strength, value],
+                      }))
+                    }
+                  />
+                );
+              })}
+            </Form.Control>
+          </Form.Field>
+
+          <Form.Field className={styles.field} mb={5}>
+            <Form.Label>
+              <Heading size={5} className={styles.heading}>
+                Сорт винограду
+              </Heading>
+            </Form.Label>
+
+            <Form.Control>
+              {Object.entries(Grape).map(([key, value]) => {
+                const isChecked = selectedFilters.grape.includes(value);
+
+                return (
+                  <Checkbox
+                    key={key}
+                    labelText={value}
+                    id={`${key}-checkbox`}
+                    checked={isChecked}
+                    onChange={() =>
+                      setSelectedFilters(current => ({
+                        ...current,
+                        grape: isChecked
+                          ? current.grape.filter(grape => grape !== value)
+                          : [...current.grape, value],
+                      }))
+                    }
+                  />
+                );
+              })}
+            </Form.Control>
+          </Form.Field>
+
+          <Form.Field
+            className={`${styles.field} ${styles.price_form_field}`}
+            mb={5}
           >
-            <Button color="primary">Apply</Button>
-            <Button>Reset</Button>
-          </Form.Control>
-        </Form.Field>
-      </form>
-    </aside>
-  </Block>
-);
+            <Form.Label>
+              <Heading size={5} className={styles.heading}>
+                Ціна
+              </Heading>
+            </Form.Label>
+
+            <Form.Control>
+              <p>Від</p>
+              <Form.Input />
+              <p>До</p>
+              <Form.Input />
+            </Form.Control>
+          </Form.Field>
+
+          <Form.Field>
+            <Form.Control
+              className={styles.button_group}
+              renderAs={Button.Group}
+              textAlign="center"
+            >
+              <Button color="primary" onClick={handleApply}>
+                Apply
+              </Button>
+              <Button onClick={handleReset}>Reset</Button>
+            </Form.Control>
+          </Form.Field>
+        </form>
+      </aside>
+    </Block>
+  );
+};

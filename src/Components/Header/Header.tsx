@@ -11,8 +11,11 @@ import {
   faList,
   faShoppingCart,
   faSignIn,
+  faSignOut,
   faUserCircle,
 } from '@fortawesome/free-solid-svg-icons';
+import { checkLoggedIn, removeAuthToken } from '../../utils/authTokenCookie';
+import { logoutUser } from '../../api/auth';
 
 export const Header = () => {
   const [isSignUpModalShown, setIsSignUpModalShown] = useState(false);
@@ -20,6 +23,12 @@ export const Header = () => {
   const [isMenuShown, setIsMenuShown] = useState(false);
 
   const hideMenu = useCallback(() => setIsMenuShown(false), []);
+
+  const handleLogOut = async () => {
+    await logoutUser();
+    removeAuthToken();
+    window.location.reload();
+  };
 
   return (
     <>
@@ -49,7 +58,7 @@ export const Header = () => {
               onClick={hideMenu}
             >
               <FontAwesomeIcon icon={faHome} />
-              <p className={styles.icon_p}>Home</p>
+              <p className={styles.icon_p}>Головна</p>
             </Navbar.Item>
 
             <Navbar.Item
@@ -59,36 +68,50 @@ export const Header = () => {
               onClick={hideMenu}
             >
               <FontAwesomeIcon icon={faList} />
-              <p className={styles.icon_p}>Catalog</p>
+              <p className={styles.icon_p}>Каталог</p>
             </Navbar.Item>
 
-            <Navbar.Item
-              className={styles.navbar_item}
-              renderAs={Link}
-              to="/cart/1"
-              onClick={hideMenu}
-            >
-              <FontAwesomeIcon icon={faShoppingCart} />
-              <p className={styles.icon_p}>Cart</p>
-            </Navbar.Item>
+            {checkLoggedIn() && (
+              <Navbar.Item
+                className={styles.navbar_item}
+                renderAs={Link}
+                to="/cart/1"
+                onClick={hideMenu}
+              >
+                <FontAwesomeIcon icon={faShoppingCart} />
+                <p className={styles.icon_p}>Кошик</p>
+              </Navbar.Item>
+            )}
           </Navbar.Container>
 
           <Navbar.Container align="right">
-            <Navbar.Item
-              className={styles.navbar_item}
-              onClick={() => setIsSignUpModalShown(true)}
-            >
-              <FontAwesomeIcon icon={faUserCircle} />
-              <p className={styles.icon_p_auth}>Sign Up</p>
-            </Navbar.Item>
+            {checkLoggedIn() ? (
+              <Navbar.Item
+                className={styles.navbar_item}
+                onClick={handleLogOut}
+              >
+                <FontAwesomeIcon icon={faSignOut} />
+                <p className={styles.icon_p_auth}>Вийти</p>
+              </Navbar.Item>
+            ) : (
+              <>
+                <Navbar.Item
+                  className={styles.navbar_item}
+                  onClick={() => setIsSignUpModalShown(true)}
+                >
+                  <FontAwesomeIcon icon={faUserCircle} />
+                  <p className={styles.icon_p_auth}>Реєстрація</p>
+                </Navbar.Item>
 
-            <Navbar.Item
-              className={styles.navbar_item}
-              onClick={() => setIsLogInModalShown(true)}
-            >
-              <FontAwesomeIcon icon={faSignIn} />
-              <p className={styles.icon_p_auth}>Log In</p>
-            </Navbar.Item>
+                <Navbar.Item
+                  className={styles.navbar_item}
+                  onClick={() => setIsLogInModalShown(true)}
+                >
+                  <FontAwesomeIcon icon={faSignIn} />
+                  <p className={styles.icon_p_auth}>Вхід</p>
+                </Navbar.Item>
+              </>
+            )}
           </Navbar.Container>
         </Navbar.Menu>
       </Navbar>
