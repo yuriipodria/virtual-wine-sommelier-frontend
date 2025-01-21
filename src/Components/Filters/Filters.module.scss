@@ -14,6 +14,8 @@ $filters-field-border-color: #dadada;
   border-radius: 8px;
 
   @include mixins.tablet {
+    padding-block: $bulma-spacing-4;
+    padding-inline: $bulma-spacing-5;
     min-width: max-content;
     background-color: $filters-bg-color;
     border-radius: 0;
@@ -27,7 +29,6 @@ $filters-field-border-color: #dadada;
   }
 
   @include mixins.desktop {
-    padding-block: $bulma-spacing-4;
     padding-inline: $bulma-spacing-6;
   }
 }
@@ -63,12 +64,25 @@ $filters-field-border-color: #dadada;
   }
 }
 
+.grape_control {
+  max-height: 350px;
+  overflow: hidden auto;
+}
+
 .heading {
   color: var(--bulma-black);
 }
 
+.price_control {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
 .price_form_field {
-  width: 120px;
+  @include mixins.tablet {
+    width: 100%;
+  }
 }
 
 .button_group {
@@ -78,4 +92,40 @@ $filters-field-border-color: #dadada;
   @include mixins.tablet {
     flex-direction: row;
   }
+}
+
+.range_slider {
+  -webkit-appearance: none;
+  appearance: none;
+  display: block;
+  width: 100%;
+  height: 6px;
+  margin-block: 8px;
+  background: #ddd;
+  border-radius: 3px;
+  outline: none;
+  transition: all 0.3s;
+}
+
+.range_slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  background: var(--bulma-primary);
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
+  transition: all 0.3s;
+}
+
+.range_slider:hover {
+  background: #ccc;
+}
+
+.range_slider::-webkit-slider-thumb:hover {
+  background: var(--bulma-primary-40);
+}
+
+.price {
+  font-weight: 600;
 }

@@ -32,11 +32,8 @@ export const filterProducts = (
         itemGrapes.some(grape => filters.grape.includes(grape))
       );
     })
-    .filter(
-      item =>
-        item.price >= (filters.price[0] || MIN_PRICE) &&
-        item.price <= (filters.price[1] || MAX_PRICE),
-    )
+    .filter(item => item.price >= (filters.priceFrom || MIN_PRICE))
+    .filter(item => item.price <= (filters.priceTo || MAX_PRICE))
     .filter(
       item =>
         !filters.query ||

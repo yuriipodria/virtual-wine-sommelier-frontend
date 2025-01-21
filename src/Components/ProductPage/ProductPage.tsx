@@ -3,14 +3,22 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Block, Button, Heading, Image, Loader } from 'react-bulma-components';
 import { Tag } from '../Tag';
 import styles from './ProductPage.module.scss';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Product } from '../../types/Product';
 import { getProductById } from '../../api/products';
 import { useParams } from 'react-router-dom';
+import { addToCart } from '../../api/cart';
 
 export const ProductPage = () => {
   const id = +(useParams().id || 1);
   const [product, setProduct] = useState<Product | null>(null);
+
+  const onClick = useCallback(
+    (quantity: number) => {
+      addToCart(id, quantity);
+    },
+    [id],
+  );
 
   useEffect(() => {
     getProductById(id)
@@ -40,11 +48,11 @@ export const ProductPage = () => {
           </Block>
 
           <Block className={styles.tags_block}>
-            <Tag text={country} />
-            <Tag text={color} />
-            <Tag text={type} />
-            <Tag text={strength} />
-            <Tag text={grape} />
+            <Tag text={country} keyName="country" />
+            <Tag text={color} keyName="color" />
+            <Tag text={type} keyName="type" />
+            <Tag text={strength} keyName="strength" />
+            <Tag text={grape} keyName="grape" />
           </Block>
         </Block>
       </Block>
@@ -57,7 +65,12 @@ export const ProductPage = () => {
         <Block textSize={5}>{description}</Block>
       </Block>
 
-      <Button className={styles.button} textWeight="semibold" textSize={5}>
+      <Button
+        className={styles.button}
+        textWeight="semibold"
+        textSize={5}
+        onClick={() => onClick(1)}
+      >
         Додати до кошика
         <FontAwesomeIcon className={styles.icon} icon={faCartPlus} />
       </Button>

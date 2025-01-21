@@ -21,7 +21,7 @@ root.render(
             <Route index element={<Homepage />} />
             <Route path="catalog" element={<Catalog />} />
             <Route path="product/:id" element={<ProductPage />} />
-            <Route path="/cart/:id" element={<RequireAuth />}>
+            <Route path="/cart" element={<RequireAuth />}>
               <Route index element={<Catalog />} />
             </Route>
           </Route>

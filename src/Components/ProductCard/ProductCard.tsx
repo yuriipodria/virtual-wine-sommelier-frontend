@@ -29,11 +29,11 @@ export const ProductCard: React.FC<{ product: Product }> = ({
 
         <Card.Content p={4}>
           <Content className={styles.content}>
-            <Tag text={country} />
-            <Tag text={color} />
-            <Tag text={type} />
-            <Tag text={strength} />
-            <Tag text={grape} />
+            <Tag text={country} keyName="country" />
+            <Tag text={color} keyName="color" />
+            <Tag text={type} keyName="type" />
+            <Tag text={strength} keyName="strength" />
+            <Tag text={grape} keyName="grape" />
           </Content>
         </Card.Content>
 

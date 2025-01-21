@@ -4,7 +4,7 @@ import { getAuthToken } from './authTokenCookie';
 const BASE_URL =
   'https://ec2-16-170-249-41.eu-north-1.compute.amazonaws.com/api';
 
-type RequestMethod = 'GET' | 'POST' | 'PATCH' | 'DELETE';
+type RequestMethod = 'GET' | 'POST' | 'PATCH' | 'DELETE' | 'PUT';
 
 async function request<T>(
   url: string,
@@ -38,4 +38,5 @@ export const client = {
   post: <T>(url: string, data?: any) => request<T>(url, 'POST', data),
   patch: <T>(url: string, data: any) => request<T>(url, 'PATCH', data),
   delete: (url: string) => request(url, 'DELETE'),
+  put: <T>(url: string, data: any) => request<T>(url, 'PUT', data),
 };

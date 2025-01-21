@@ -1,12 +1,13 @@
 .container {
   display: flex;
   align-items: center;
+  transform-origin: left;
   transition: transform 0.1s ease;
 
   &:has(.input:hover),
   &:has(.label:hover) {
     cursor: pointer;
-    transform: scale(1.1);
+    transform: scale(1.05);
   }
 }
 

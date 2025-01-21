@@ -6,6 +6,7 @@ export interface FiltersInterface {
   type: Type[];
   strength: Strength[];
   grape: Grape[];
-  price: number[];
+  priceFrom: number | null;
+  priceTo: number | null;
   query: string | null;
 }

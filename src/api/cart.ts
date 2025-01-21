@@ -1,12 +1,10 @@
-import { Product } from '../types/Product';
+import { CartResponse } from '../types/CartResponse';
 import { client } from '../utils/fetchClient';
-
-interface CartResponse {
-  id: number;
-  userId: number;
-  cartItems: Product[];
-}
 
 export const getCart = () => {
   return client.get<CartResponse>(`/cart`);
+};
+
+export const addToCart = (wineId: number, quantity: number) => {
+  return client.post<CartResponse>(`/cart`, { wineId, quantity });
 };

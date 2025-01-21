@@ -11,10 +11,10 @@ import {
   Loader,
   Pagination,
 } from 'react-bulma-components';
-import { useParams, useSearchParams } from 'react-router-dom';
+import { useLocation, useSearchParams } from 'react-router-dom';
 import { SearchParams } from '../../types/SearchParams';
 import { getSearchWith } from '../../utils/getSearchWith';
-import { getAllProducts } from '../../api/products';
+import { getAllProducts, getProductsById } from '../../api/products';
 import {
   Color,
   Country,
@@ -26,13 +26,14 @@ import {
 import { getCart } from '../../api/cart';
 import { FiltersInterface } from '../../types/FiltersInterface';
 import { filterProducts } from '../../utils/filterProducts';
-import { UserData } from '../../types/UserData';
-import { getUserInfo } from '../../api/users';
 
 export const Catalog = () => {
   const BULMA_MOBILE_TABLET_BREAKPOINT = 768;
   const BULMA_TABLET_DESKTOP_BREAKPOINT = 1023;
   const BULMA_DESKTOP_WIDESCREEN_BREAKPOINT = 1215;
+
+  const MIN_PRICE = 0;
+  const MAX_PRICE = 2000;
 
   const getPerPage = useCallback((width: number) => {
     if (width > BULMA_DESKTOP_WIDESCREEN_BREAKPOINT) {
@@ -44,9 +45,8 @@ export const Catalog = () => {
     }
   }, []);
 
-  const { id } = useParams();
-  const isCartRoute = !!id;
-  const [userData, setUserData] = useState<UserData | null>(null);
+  const { pathname } = useLocation();
+  const isCartRoute = pathname === '/cart';
 
   const [perPage, setPerPage] = useState(getPerPage(window.innerWidth));
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -62,7 +62,8 @@ export const Catalog = () => {
     type: (searchParams.getAll('type') as Type[]) || [],
     strength: (searchParams.getAll('strength') as Strength[]) || [],
     grape: (searchParams.getAll('grape') as Grape[]) || [],
-    price: searchParams.getAll('price').map(val => +val) || [],
+    priceFrom: +(searchParams.get('priceFrom') || MIN_PRICE),
+    priceTo: +(searchParams.get('priceTo') || MAX_PRICE),
     query: searchParams.get('query') || null,
   });
 
@@ -72,7 +73,8 @@ export const Catalog = () => {
     type: (searchParams.getAll('type') as Type[]) || [],
     strength: (searchParams.getAll('strength') as Strength[]) || [],
     grape: (searchParams.getAll('grape') as Grape[]) || [],
-    price: searchParams.getAll('price').map(val => +val) || [],
+    priceFrom: +(searchParams.get('priceFrom') || MIN_PRICE),
+    priceTo: +(searchParams.get('priceTo') || MAX_PRICE),
     query: searchParams.get('query') || null,
   };
 
@@ -108,7 +110,8 @@ export const Catalog = () => {
       type: (searchParams.getAll('type') as Type[]) || [],
       strength: (searchParams.getAll('strength') as Strength[]) || [],
       grape: (searchParams.getAll('grape') as Grape[]) || [],
-      price: searchParams.getAll('price').map(val => +val) || [],
+      priceFrom: Number(searchParams.get('priceFrom')) || null,
+      priceTo: Number(searchParams.get('priceTo')) || null,
       query: searchParams.get('query') || null,
     });
   }, [searchParams]);
@@ -119,17 +122,16 @@ export const Catalog = () => {
     if (isCartRoute) {
       getCart()
         .then(data => {
-          setProducts(data.cartItems);
-        })
-        .catch(error => {
-          throw error;
-        })
-        .finally(() => setAreProductsLoading(false));
+          const ids = data.cartItems.map(item => item.id);
 
-      getUserInfo()
-        .then(setUserData)
+          return getProductsById(ids);
+        })
+        .then(setProducts)
         .catch(error => {
           throw error;
+        })
+        .finally(() => {
+          setAreProductsLoading(false);
         });
 
       return;
@@ -188,7 +190,7 @@ export const Catalog = () => {
           <>
             {isCartRoute && (
               <Heading mb="0" ml={6} mt={5} className={styles.cart_heading}>
-                {`${userData?.firstName} ${userData?.lastName}'s cart`}
+                Твій кошик
               </Heading>
             )}
 

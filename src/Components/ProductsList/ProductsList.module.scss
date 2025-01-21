@@ -2,9 +2,11 @@
 @use '../../variables.scss' as *;
 
 .columns {
+  width: 100%;
+
   padding: $bulma-spacing-5;
 
-  @include mixins.tablet {
+  @include mixins.desktop {
     padding: $bulma-spacing-6;
   }
 }

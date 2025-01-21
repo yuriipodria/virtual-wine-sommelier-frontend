@@ -75,7 +75,7 @@ export const Header = () => {
               <Navbar.Item
                 className={styles.navbar_item}
                 renderAs={Link}
-                to="/cart/1"
+                to="/cart"
                 onClick={hideMenu}
               >
                 <FontAwesomeIcon icon={faShoppingCart} />

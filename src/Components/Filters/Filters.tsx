@@ -18,6 +18,9 @@ export const Filters: React.FC<Props> = ({
   setSelectedFilters,
   setSearchWith,
 }) => {
+  const MIN_PRICE = 0;
+  const MAX_PRICE = 2000;
+
   const handleApply = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
     setSearchWith({ ...selectedFilters, page: null });
@@ -32,7 +35,8 @@ export const Filters: React.FC<Props> = ({
       type: [],
       strength: [],
       grape: [],
-      price: [],
+      priceFrom: null,
+      priceTo: null,
       query: null,
     });
     window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
@@ -173,7 +177,7 @@ export const Filters: React.FC<Props> = ({
               </Heading>
             </Form.Label>
 
-            <Form.Control>
+            <Form.Control className={styles.grape_control}>
               {Object.entries(Grape).map(([key, value]) => {
                 const isChecked = selectedFilters.grape.includes(value);
 
@@ -207,11 +211,56 @@ export const Filters: React.FC<Props> = ({
               </Heading>
             </Form.Label>
 
-            <Form.Control>
-              <p>Від</p>
-              <Form.Input />
-              <p>До</p>
-              <Form.Input />
+            <Form.Control className={styles.price_control} mt={3}>
+              <p>
+                Від{' '}
+                <span className={styles.price}>
+                  {selectedFilters.priceFrom || MIN_PRICE} грн
+                </span>{' '}
+              </p>
+
+              <input
+                className={styles.range_slider}
+                type="range"
+                min={MIN_PRICE}
+                max={MAX_PRICE}
+                step="1"
+                value={selectedFilters.priceFrom || MIN_PRICE}
+                onChange={e =>
+                  setSelectedFilters(current => {
+                    const newState = { ...current };
+
+                    newState.priceFrom = +e.target.value;
+
+                    return newState;
+                  })
+                }
+              />
+
+              <p>
+                До{' '}
+                <span className={styles.price}>
+                  {selectedFilters.priceTo || MAX_PRICE} грн
+                </span>{' '}
+              </p>
+
+              <input
+                className={styles.range_slider}
+                type="range"
+                min={MIN_PRICE}
+                max={MAX_PRICE}
+                step="1"
+                value={selectedFilters.priceTo || MAX_PRICE}
+                onChange={e =>
+                  setSelectedFilters(current => {
+                    const newState = { ...current };
+
+                    newState.priceTo = +e.target.value;
+
+                    return newState;
+                  })
+                }
+              />
             </Form.Control>
           </Form.Field>
 
