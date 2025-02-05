@@ -8,3 +8,7 @@ export const getCart = () => {
 export const addToCart = (wineId: number, quantity: number) => {
   return client.post<CartResponse>(`/cart`, { wineId, quantity });
 };
+
+export const updateQuantity = (wineId: number, quantity: number) => {
+  return client.put<CartResponse>(`/cart/items/${wineId}`, { quantity });
+};

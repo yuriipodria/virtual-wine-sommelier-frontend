@@ -7,9 +7,7 @@ import { SearchParams } from '../../types/SearchParams';
 
 interface Props {
   selectedFilters: FiltersInterface;
-  setSelectedFilters: (
-    current: (value: FiltersInterface) => FiltersInterface,
-  ) => void;
+  setSelectedFilters: React.Dispatch<React.SetStateAction<FiltersInterface>>;
   setSearchWith: (params: SearchParams) => void;
 }
 
@@ -29,14 +27,25 @@ export const Filters: React.FC<Props> = ({
 
   const handleReset = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
+    setSelectedFilters({
+      country: [],
+      color: [],
+      type: [],
+      strength: [],
+      grape: [],
+      priceFrom: MIN_PRICE,
+      priceTo: MAX_PRICE,
+      query: null,
+    });
+
     setSearchWith({
       country: [],
       color: [],
       type: [],
       strength: [],
       grape: [],
-      priceFrom: null,
-      priceTo: null,
+      priceFrom: MIN_PRICE,
+      priceTo: MAX_PRICE,
       query: null,
     });
     window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
@@ -46,6 +55,32 @@ export const Filters: React.FC<Props> = ({
     <Block className={styles.block} mb="0">
       <aside>
         <form className={styles.form}>
+          <Form.Field className={styles.field} mb={5}>
+            <Form.Label>
+              <Heading size={5} className={styles.heading}>
+                Пошук
+              </Heading>
+            </Form.Label>
+
+            <Form.Control>
+              <Form.Input
+                className={styles.query_input}
+                placeholder="Пошук за назвою..."
+                value={selectedFilters.query || ''}
+                onChange={e => {
+                  setSelectedFilters(current => {
+                    const newState = { ...current };
+
+                    newState.query =
+                      e.target.value.trim().toLowerCase() || null;
+
+                    return newState;
+                  });
+                }}
+              ></Form.Input>
+            </Form.Control>
+          </Form.Field>
+
           <Form.Field className={styles.field} mb={5}>
             <Form.Label>
               <Heading size={5} className={styles.heading}>
@@ -273,6 +308,7 @@ export const Filters: React.FC<Props> = ({
               <Button color="primary" onClick={handleApply}>
                 Apply
               </Button>
+
               <Button onClick={handleReset}>Reset</Button>
             </Form.Control>
           </Form.Field>

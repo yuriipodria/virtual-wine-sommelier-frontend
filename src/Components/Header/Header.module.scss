@@ -16,6 +16,12 @@
   }
 }
 
+.navbar_container {
+  @include mixins.desktop {
+    gap: 8px;
+  }
+}
+
 .navbar_item {
   display: flex;
   align-items: center;

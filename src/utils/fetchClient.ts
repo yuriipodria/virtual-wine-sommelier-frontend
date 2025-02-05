@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { getAuthToken } from './authTokenCookie';
+import { logoutUser } from '../api/auth';
+import { getAuthToken, removeAuthToken } from './authTokenCookie';
 
 const BASE_URL =
   'https://ec2-16-170-249-41.eu-north-1.compute.amazonaws.com/api';
@@ -25,6 +26,12 @@ async function request<T>(
   };
 
   const response = await fetch(BASE_URL + url, options);
+
+  if (response.status === 401 && authToken) {
+    await logoutUser();
+    removeAuthToken();
+    window.location.reload();
+  }
 
   if (!response.ok) {
     throw new Error(`HTTP error! status: ${response.status}`);

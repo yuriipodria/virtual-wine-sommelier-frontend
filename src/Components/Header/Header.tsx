@@ -50,7 +50,7 @@ export const Header = () => {
         </Navbar.Brand>
 
         <Navbar.Menu className={cn({ 'is-active': isMenuShown })}>
-          <Navbar.Container>
+          <Navbar.Container className={styles.navbar_container}>
             <Navbar.Item
               className={styles.navbar_item}
               renderAs={Link}
@@ -84,7 +84,7 @@ export const Header = () => {
             )}
           </Navbar.Container>
 
-          <Navbar.Container align="right">
+          <Navbar.Container align="right" className={styles.navbar_container}>
             {checkLoggedIn() ? (
               <Navbar.Item
                 className={styles.navbar_item}

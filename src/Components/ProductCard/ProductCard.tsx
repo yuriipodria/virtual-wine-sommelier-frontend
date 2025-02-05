@@ -2,11 +2,15 @@ import { Card, Columns, Content } from 'react-bulma-components';
 import styles from './ProductCard.module.scss';
 import { Link } from 'react-router-dom';
 import { Tag } from '../Tag';
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { Product } from '../../types/Product';
 
-export const ProductCard: React.FC<{ product: Product }> = ({
+export const ProductCard: React.FC<{
+  product: Product;
+  children?: ReactNode;
+}> = ({
   product: { name, country, color, type, strength, grape, price, id },
+  children,
 }) => {
   return (
     <Columns.Column
@@ -15,7 +19,7 @@ export const ProductCard: React.FC<{ product: Product }> = ({
       desktop={{ size: 'one-quarter' }}
       widescreen={{ size: 'one-fifth' }}
     >
-      <Card>
+      <Card mb={2}>
         <Card.Image
           renderAs={Link}
           to={`/product/${id}`}
@@ -43,6 +47,7 @@ export const ProductCard: React.FC<{ product: Product }> = ({
           </Card.Footer.Item>
         </Card.Footer>
       </Card>
+      {children}
     </Columns.Column>
   );
 };

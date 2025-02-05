@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/indent */
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ProductsList } from '../ProductsList';
 import styles from './Catalog.module.scss';
@@ -14,8 +15,9 @@ import {
 import { useLocation, useSearchParams } from 'react-router-dom';
 import { SearchParams } from '../../types/SearchParams';
 import { getSearchWith } from '../../utils/getSearchWith';
-import { getAllProducts, getProductsById } from '../../api/products';
+import { getAllProducts, getProductsByIds } from '../../api/products';
 import {
+  CartProduct,
   Color,
   Country,
   Grape,
@@ -53,7 +55,9 @@ export const Catalog = () => {
   const [areFiltersShown, setAreFiltersShown] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const currentPage = +(searchParams.get('page') || 1);
-  const [productsFromServer, setProducts] = useState<Product[]>([]);
+  const [productsFromServer, setProductsFromServer] = useState<
+    Product[] | CartProduct[]
+  >([]);
   const [areProductsLoading, setAreProductsLoading] = useState(true);
 
   const [selectedFilters, setSelectedFilters] = useState<FiltersInterface>({
@@ -122,11 +126,15 @@ export const Catalog = () => {
     if (isCartRoute) {
       getCart()
         .then(data => {
-          const ids = data.cartItems.map(item => item.id);
+          const items = data.cartItems.map(item => ({
+            id: item.wineId,
+            cartId: item.id,
+            quantity: item.quantity,
+          }));
 
-          return getProductsById(ids);
+          return getProductsByIds(items);
         })
-        .then(setProducts)
+        .then(setProductsFromServer)
         .catch(error => {
           throw error;
         })
@@ -139,7 +147,7 @@ export const Catalog = () => {
 
     getAllProducts()
       .then(data => {
-        setProducts(data.wineDtos);
+        setProductsFromServer(data.wineDtos);
       })
       .catch(error => {
         throw error;
@@ -194,7 +202,15 @@ export const Catalog = () => {
               </Heading>
             )}
 
-            <ProductsList toDisplay={displayedProducts} />
+            <ProductsList
+              setProductsFromServer={
+                setProductsFromServer as React.Dispatch<
+                  React.SetStateAction<CartProduct[]>
+                >
+              }
+              toDisplay={displayedProducts as CartProduct[]}
+              isCartRoute={isCartRoute}
+            />
           </>
         )}
 
